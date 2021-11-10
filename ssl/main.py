@@ -139,8 +139,8 @@ def discord_send_message(message, title):
     '''
     # time_now = datetime.datetime.now().time()
     if workdays() == True:
-        webhook = "https://discord.com/api/webhooks/836502024433958962/aEZntH_dyB9DGSSG4YAdXkl1ymUKq_PYKNc6khaSoMwckQqKeIgUDtDHe3y937cwwe7k" # ssl-rele-channel
-        # webhook = "https://discord.com/api/webhooks/834880767314231317/DJAYy1LKvUABIgPGJDRmrkic7AbWTzCg09kwArvwbkToe_pwE8HQWw7cw-uWKZPExnyi" # saar-channel
+        webhook = f"{os.environ['SAAR_CHANNEL']}" # ssl-rele-channel
+        # webhook = f"{os.environ['RELEAI_CHANNEL']}" # saar-channel
         _discord = Webhook.from_url(webhook, adapter=RequestsWebhookAdapter())
         _discord.send("\n\n" + "**" + title + "\n**" + "``" + message + "``" + "\n\n")
     else:
