@@ -2,7 +2,6 @@ import pandas as pd
 import firebase_admin
 import os, json
 from flask import Flask, jsonify
-# from distutils import util
 from datetime import datetime
 from datetime import timedelta, timezone
 from google.cloud import logging, bigquery
@@ -17,10 +16,7 @@ def statistics(hours):
     '''
     get the logs from google logging
     '''
-    clusters = [
-        "bot-ms-1",
-        "bot-ms-eu-juan"
-    ]
+    clusters = [ "bot-ms-1" ]
     app = "cognition"
     last_hour_date_time = datetime.now(timezone.utc) - timedelta(hours=int(hours))
     _date = last_hour_date_time.isoformat().split(".")[0]
@@ -50,11 +46,11 @@ def kpi1():
             if collection == "orgs":
                 known_orgs[doc.id] = doc.get("name")
             if collection == "users":
-                known_users[doc.id] = [ doc.to_dict().get('first_name','None'), doc.to_dict().get('last_name','None'), doc.to_dict().get('emails', 'None')[0]]
+                known_users[doc.id] = [ doc.to_dict().get("first_name","None"), doc.to_dict().get("last_name","None"), doc.to_dict().get("emails", "None")[0]]
 
     for log in statistics(12):
-        log = json.loads(log['message'])
-        app_ids = [app for app in log["appIds"].split(',')]
+        log = json.loads(log["message"])
+        app_ids = [app for app in log["appIds"].split(",")]
         for app_id in app_ids:
             _sum.append({
                 "session_id": log["sessionId"],
@@ -81,28 +77,17 @@ def convert_datetime(o):
     if isinstance(o, datetime):
         return o.__str__()
 
-def defines_env():
-    '''
-    get the env project
-    '''
-    cred_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-    if "releai-bot-prod" in cred_path:
-        env = "releai-bot-prod"
-    else:
-        env = "releai-bot-dev"
-    return env
-
 @app.route('/api/v1/bigquery')
-def _bigquery():
+def main():
     '''
     main function
     write the content to bigquery
     '''
-    env = defines_env()
-    time_now = str(datetime.now()).split('.')[0]
+    env = "releai-bot-prod" if "releai-bot-prod" in os.environ["GOOGLE_APPLICATION_CREDENTIALS"] else "releai-bot-dev"
+    time_now = str(datetime.now()).split(".")[0]
     info = kpi1()
     client = bigquery.Client(project=env)
-    client.load_table_from_dataframe(info, destination='kpi.kpi_db')
+    client.load_table_from_dataframe(info, destination="kpi.kpi_db")
     return jsonify({"message": f"write to BigQuery complete {time_now}"})
 
 if __name__ == '__main__':
