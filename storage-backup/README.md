@@ -1,8 +1,8 @@
 # This is the first script control by post request
 #
-1. the functions backup the FireStore database collections
-2. behind the scenes the script uses FireStore import-export
-3. at the end of the process all the JSON files upload to the bucket
+1. The function backup the firestore database collections.
+2. Uses FireStore import-export.
+3. At the end of the process, all the JSON files upload to the bucket.
 # Example to post request:
 
 **Header type:**
