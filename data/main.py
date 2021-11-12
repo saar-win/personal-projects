@@ -47,11 +47,11 @@ def fs_users():
             "org_name": org_data["name"],
             "users_counter": 0,
             "subscription": "true" if org_data.get("subscription") else "false",
-            "create_date": str(org_data["create_timestamp"]).split(' ')[0],
-            "trail_end": str(create_timestamp + timedelta(days=org_data.get('trail_days'))).split(' ')[0],
-            "hubspot_api": "true" if org_data.get('hubspot',{}).get('api_key') else "false",
+            "create_date": str(org_data["create_timestamp"]).split(" ")[0],
+            "trail_end": str(create_timestamp + timedelta(days=org_data.get("trail_days"))).split(" ")[0],
+            "hubspot_api": "true" if org_data.get("hubspot",{}).get("api_key") else "false",
             "bot_number": str(org_data.get("clara_number")),
-            "bot_lang": org_data.get("bot_lang", 'None'),
+            "bot_lang": org_data.get("bot_lang", "None"),
             "daily_new_contact_counter": 0,
             "daily_new_attachment_counter": 0,
             "daily_new_record_counter": 0,
@@ -67,19 +67,19 @@ def fs_users():
         if len(user_org):
             if user_org[0] in org_ids:
                 _object[user_org[0]]["users"].append({
-                    "org_name": _object[user_org[0]]['org_name'],
+                    "org_name": _object[user_org[0]]["org_name"],
                     "org_id": user_data.get("orgs")[0],
                     "user_id": user.id,
                     "first_name": user_data.get("first_name"),
                     "last_name": user_data.get("last_name"),
-                    "is_admin": bool(util.strtobool("true")) if user_data.get('auth',{}).get('access_level') == 10 else bool(util.strtobool("false")),
+                    "is_admin": bool(util.strtobool("true")) if user_data.get("auth",{}).get("access_level") == 10 else bool(util.strtobool("false")),
                     "emails": user_data.get("emails")[0],
                     "mobiles": user_data.get("mobiles")[0],
                     "salesforce": bool(util.strtobool("true")) if user_data.get("salesforce") else bool(util.strtobool("false")),
                     "hubspot_oauth": bool(util.strtobool("true")) if user_data.get("hubspot") else bool(util.strtobool("false")),
                     "mailing": bool(util.strtobool("true")) if user_data.get("mailing") else bool(util.strtobool("false")),
-                    "create_timestamp": str(user_data.get("create_timestamp")).split('.')[0],
-                    "last_seen": str(user_data.get('last_seen_timestamp')).split('.')[0],
+                    "create_timestamp": str(user_data.get("create_timestamp")).split(".")[0],
+                    "last_seen": str(user_data.get("last_seen_timestamp")).split(".")[0],
                     "country_code": user_data.get("mobiles_country_code"),
                     "mailing_records_counter": 0,
                     "hubspot_records_counter": 0,
@@ -104,11 +104,11 @@ def count_logs():
     data = fs_users()
     for org_id in data:
         # for user counter
-        if int(str(data[org_id]['users']).count('user_id')):
-            data[org_id]["users_counter"] = int(str(data[org_id]['users']).count('user_id'))
+        if int(str(data[org_id]["users"]).count("user_id")):
+            data[org_id]["users_counter"] = int(str(data[org_id]["users"]).count("user_id"))
         for user in data[org_id].get("users", []):
-                if str(user['create_timestamp']).split(' ')[0] in str(datetime.now()).split(' ')[0]:
-                    data[org_id]['new_user_daily'] = data[org_id]['new_user_daily'] + 1
+                if str(user["create_timestamp"]).split(" ")[0] in str(datetime.now()).split(' ')[0]:
+                    data[org_id]["new_user_daily"] = data[org_id]["new_user_daily"] + 1
         for log in logs:
             if type(log) == str:
                 integrations = [ "mailing", "hubspot", "salesforce" ]
@@ -132,14 +132,12 @@ def count_logs():
                                             user[f"{integration}_new_contact_records_counter"] = user[f"{integration}_new_contact_records_counter"] + 1
                                         if kind == "new_search":
                                             user[f"{integration}_searches_records_counter"] = user[f"{integration}_searches_records_counter"] + 1
-
     return data
 
 def user_deleted():
     '''
     for deleted user document
     '''
-    store = firestore.client()
     logs = statistics(24, app_list=["components"], flag="user_deleted")
     deleted_obj = []
     for log in logs:
@@ -154,13 +152,17 @@ def user_deleted():
             "deletedUserMobile": log.get("deletedUserMobile"),
             "run_timestamp": datetime.now()
         })
-    return deleted_obj
+    users_deleted = json.dumps(deleted_obj, default = convert_datetime)
+    df = pd.read_json(users_deleted)
+    if df.empty:
+        return None
+    else:
+        return df
 
 def org_deleted():
     '''
-    for delete org
+    for delete org document
     '''
-    store = firestore.client()
     logs = statistics(24, app_list=["components"], flag="org_deleted")
     deleted_obj = []
     for log in logs:
@@ -175,7 +177,12 @@ def org_deleted():
             "deletedUserMobile": log.get("deletedUserMobile"),
             "run_timestamp": datetime.now()
         })
-    return deleted_obj
+    orgs_deleted = json.dumps(deleted_obj, default = convert_datetime)
+    df = pd.read_json(orgs_deleted)
+    if df.empty:
+        return None
+    else:
+        return df
 
 def convert_datetime(o):
     '''
@@ -190,8 +197,8 @@ def map_orgs():
     '''
     full_data = count_logs()
     orgs = []
-    for org_id, full_org_data in full_data.items():
-        del full_org_data['users']
+    for full_org_data in full_data.values():
+        del full_org_data["users"]
         orgs.append(full_org_data)
     orgs = json.dumps(orgs, default = convert_datetime)
     df = pd.read_json(orgs)
@@ -203,58 +210,39 @@ def map_users():
     '''
     full_data = count_logs()
     users = []
-    for _, full_org_data in full_data.items():
-        if full_org_data['users'] != []:
-            if len(full_org_data['users']) > 1:
-                for i in range(len(full_org_data['users'])):
-                    users.append(full_org_data['users'][i])
+    for full_org_data in full_data.values():
+        if full_org_data["users"] != []:
+            if len(full_org_data["users"]) > 1:
+                for i in range(len(full_org_data["users"])):
+                    users.append(full_org_data["users"][i])
             else:
-                users.append(full_org_data['users'][0])
+                users.append(full_org_data["users"][0])
     users_json = json.dumps(users, default = convert_datetime)
     df = pd.read_json(users_json)
     return df
 
-def map_users_deleted():
-    '''
-    format the user deleted to right structure
-    '''
-    users_deleted = json.dumps(user_deleted(), default = convert_datetime)
-    df = pd.read_json(users_deleted)
-    return df
-
-def map_orgs_deleted():
-    '''
-    format the user deleted to right structure
-    '''
-    orgs_deleted = json.dumps(org_deleted(), default = convert_datetime)
-    df = pd.read_json(orgs_deleted)
-    return df
-
 @app.route('/api/v1/bigquery')
-def bigquery():
+def main():
+    '''
+    write the objects
+    '''
     time_now = str(datetime.now()).split('.')[0]
-    client.load_table_from_dataframe(map_users(), destination='users_db.users_db')
-    client.load_table_from_dataframe(map_orgs(), destination='orgs_db.orgs_db')
-    try:
-        client.load_table_from_dataframe(map_users_deleted(), destination='deleted_users.deleted_users_db')
-    except Exception as e:
-        print("map_users_deleted ERR", e)
-    try:
-        client.load_table_from_dataframe(map_orgs_deleted(), destination='deleted_orgs.deleted_orgs_db')
-    except Exception as e:
-        print("map_orgs_deleted ERR", e)
+    client.load_table_from_dataframe(map_users(), destination="users_db.users_db")
+    client.load_table_from_dataframe(map_orgs(), destination="orgs_db.orgs_db")
+    users_deleted = user_deleted()
+    orgs_deleted = org_deleted()
+    if users_deleted != None:
+        try:
+            client.load_table_from_dataframe(users_deleted, destination="deleted_users.deleted_users_db")
+        except Exception as err:
+            print("map_users_deleted ERR", err)
+    if orgs_deleted != None:
+        try:
+            client.load_table_from_dataframe(orgs_deleted, destination="deleted_orgs.deleted_orgs_db")
+        except Exception as err:
+            print("map_orgs_deleted ERR", err)
     return jsonify({"message": f"writing to Bq completed {time_now}"})
 
-# def defined_env():
-#     '''
-#     for which project
-#     '''
-#     cred_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
-#     if "releai-bot-prod" in cred_path:
-#         env = "releai-bot-prod"
-#     else:
-#         env = "releai-bot-dev"
-#     return env
 
 # def env_settings():
 #     if os.environ['ENV'] == "prod":
