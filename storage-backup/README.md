@@ -1,4 +1,4 @@
-# This is the first script control by post request
+# Example to post request
 #
 1. The function backup the firestore database collections.
 2. Uses FireStore import-export.
