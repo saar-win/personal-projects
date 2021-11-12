@@ -2,4 +2,4 @@
 
 1. Get the subscriptions list from the Firestore.
 2. Send to stripe the subscription key.
-3. Write the information to biqQuery.
+3. Write the information from stript to biqQuery.
