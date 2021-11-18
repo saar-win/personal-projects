@@ -1,0 +1,19 @@
+application:
+  name: sample
+  namespace: default
+  lables:
+    app: sample
+  deployment:
+      image: wintrov/sample
+      tag: "latest"
+      spec:
+        port: 8080
+        targetPort: 80
+############
+ingress:
+  name: basic-ingress
+  namespace: default
+  lables:
+    app: sample
+  spec:
+    port: 8080
