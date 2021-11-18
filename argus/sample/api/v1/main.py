@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     '''
-    Returns to index.html
+    Returns the index.html
     '''
     return render_template('index.html', data = times())
 
