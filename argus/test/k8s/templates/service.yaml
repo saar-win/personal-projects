@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.application.name }}
+  namespace: {{ .Values.application.namespace }}
+spec:
+  selector:
+    app: {{ .Values.application.lables.app }}
+  type: NodePort
+  ports:
+    - port: {{ .Values.application.deployment.spec.port }}
+      protocol: TCP
+      targetPort: {{ .Values.application.deployment.spec.targetPort }}
