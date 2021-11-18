@@ -1,4 +1,4 @@
-# This Sample-app deployment by customizing helm chart.
+# This Simple-app deployment by customizing helm chart.
 # Included files:
 #
 ```
