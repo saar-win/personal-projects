@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"gke-cluster","Source":"./gke-cluster","Dir":"gke-cluster"},{"Key":"kubernetes-config","Source":"./kubernetes-config","Dir":"kubernetes-config"}]}
