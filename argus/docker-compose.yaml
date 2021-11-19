@@ -1,0 +1,18 @@
+version: '3.6'
+services:
+#############################################
+    sample:
+        container_name: sample
+        image: sample:latest
+        restart: always
+        ports:
+            - "80:80"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        networks:
+            - saar-network
+#############################################
+
+networks:
+    saar-network:

@@ -1,0 +1,75 @@
+version: '3.6'
+services:
+#############################################
+    mongodb:
+        container_name: mongodb
+        image: finout/finout-movies:latest
+        restart: always
+        ports:
+            - "80:80"
+        networks:
+            - saar-network
+#############################################
+    math:
+        container_name: math
+        image: math
+        restart: always
+        ports:
+            - "5001:5001"
+        depends_on:
+            - audit
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+                - FLASK_APP=./math/api/v1/main.py
+                - FLASK_RUN_PORT=5001
+                - APP=math
+        environment:
+            - AUDIT_SERVER_URL=http://audit:5002
+            - MONGO_DB_URL=mongodb://admin:admin@mongodb:27017/
+            - MONGO_DBNAME=audit
+            - MONGO_COL=logs
+        networks:
+            - saar-network
+#############################################
+    audit:
+        container_name: audit
+        image: audit
+        restart: always
+        depends_on:
+            - mongodb
+        ports:
+            - "5002:5002"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+            - FLASK_APP=./audit/api/v1/main.py
+            - FLASK_RUN_PORT=5002
+            - APP=audit
+        environment:
+            - MONGO_DB_URL=mongodb://admin:admin@mongodb:27017/
+            - MONGO_DBNAME=audit
+            - MONGO_COL=logs
+        networks:
+            - saar-network
+#############################################
+    nginx:
+        container_name: nginx-1
+        build:
+            context: ./nginx
+            dockerfile: ./nginx/Dockerfile
+        restart: always
+        ports:
+            - "80:80"
+        expose:
+            - 80
+        networks:
+            - saar-network
+
+networks:
+    saar-network:
+
+volumes:
+    saarv:
