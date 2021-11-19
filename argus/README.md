@@ -45,3 +45,4 @@ kubectl port-forward -n monitoring  prometheus-prom-operator-prometheus-o-promet
 
 ![This is an image](images/grafana.png)
 ![This is an image](images/prometheus.png)
+![This is an image](images/clock.png)
