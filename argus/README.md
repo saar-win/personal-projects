@@ -1,14 +1,14 @@
 # A simple clock app. Deployment using customizing helm chart.
 
 ## Included files:
-
+```
 k8s:
     - values.yaml
     - charts
     - templates:
         - service.yaml
         - deployment.yaml
-
+```
 - The "values.yaml" contains the environment variables values to keep the template generic as much as possible.
 - A simple UI that shows the user the times in cities around the world.
 - A helper Makefile for running the commands.
