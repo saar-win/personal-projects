@@ -21,7 +21,7 @@ make build-deploy
 make docker-build
 ```
 
-- This project works with Prometheus and Grafana by this helm repo installation:
+- The project monitoring by Prometheus and Grafana through this helm repo installation:
 ```
 helm install --name prom-operator stable/prometheus-operator --namespace monitoring
 ```
