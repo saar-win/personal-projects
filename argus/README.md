@@ -15,15 +15,16 @@ k8s:
 
 ## Usage
 ### To use with Helm, run:
-
+```
 make build-deploy
-
+```
 
 ### To locally use, run:
-
+```
 make docker-build
-
+```
 
 ### To interact with the page via CURL, run:
-
+```
 curl http//$IP:80/
+```
