@@ -12,6 +12,7 @@ k8s:
 - The "values.yaml" contains the environment variables values to keep the template generic as much as possible.
 - A simple UI that shows the user the times in cities around the world.
 - A helper Makefile for running the commands.
+- The project monitoring by Prometheus and Grafana.
 
 ## Usage
 ### To use with Helm, run:
@@ -28,7 +29,7 @@ make docker-build
 curl http//$IP:80/
 ```
 
-- The project monitoring by Prometheus and Grafana through this helm repo installation:
+### Prometheus and Grafana installation:
 ```
 helm install --name prom-operator stable/prometheus-operator --namespace monitoring
 ```
