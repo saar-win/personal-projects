@@ -19,7 +19,7 @@
     - Dockerfile
     - Makefile
 ```
-- Build the cluster by terraform script.
+- Create a k8s cluster by terraform script.
 - Deploy the K8S ingress by ansible.
 - Deploy the application by ansible.
 - The goal of this project is build the cluster with
