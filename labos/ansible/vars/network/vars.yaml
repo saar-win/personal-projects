@@ -2,6 +2,3 @@ name_space: default
 service_target_port: 8080
 ingress_name: basic-ingress
 target_service_name: labos
-health_check_path: /customer/v1
-health_check_name: labos-healthcheck
-health_check_port: 80
