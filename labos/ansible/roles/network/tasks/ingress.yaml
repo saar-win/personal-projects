@@ -1,0 +1,15 @@
+- name: "{{ state }} a ingress object"
+  community.kubernetes.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: "{{ ingress_name }}"
+        namespace: "{{ name_space }}"
+      spec:
+        defaultBackend:
+            service:
+              name: "{{ target_service_name }}"
+              port:
+                  number: "{{ service_target_port }}"

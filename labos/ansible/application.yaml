@@ -1,0 +1,10 @@
+
+- name: Destroy deployment / service
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/k8s/vars.yaml
+  tasks:
+    - include: roles/k8s/tasks/deployment.yaml
+    - include: roles/k8s/tasks/service.yaml
+

@@ -1,0 +1,31 @@
+- name: "{{ state }} a Deployment object"
+  community.kubernetes.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: "{{ service_name }}"
+        namespace: "{{ name_space }}"
+      spec:
+        selector:
+          matchLabels:
+            app: "{{ app_label }}"
+        template:
+          metadata:
+            labels:
+              app: "{{ app_label }}"
+          spec:
+            containers:
+              - name:  "{{ service_name }}"
+                image: "{{ image_name }}:{{ image_tag }}"
+                ports:
+                  - containerPort: "{{ container_port }}"
+                    protocol: TCP
+                livenessProbe:
+                  httpGet:
+                    path: "{{ app_liveget_path }}"
+                    port: "{{ container_port }}"
+                  initialDelaySeconds: 10
+                  failureThreshold: 3
+                  periodSeconds: 10
