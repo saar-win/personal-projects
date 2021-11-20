@@ -19,12 +19,12 @@
     - Dockerfile
     - Makefile
 ```
-- Create a k8s cluster by terraform script.
-- Deploy the K8S ingress by ansible.
-- Deploy the application by ansible.
+- Create a k8s cluster using terraform script.
+- Deploy the K8S ingress using ansible.
+- Deploy the application using ansible.
 - The goal of this project is to build the cluster with
     one technology and deploy the application with the other technology.
-# To locally use (just the app), run:
+# To run application locally, run:
 ```
 make run-local
 ```
@@ -33,7 +33,7 @@ make run-local
 terraform plan
 terraform apply
 ```
-# To deploy the application by ansible on a K8S environment, run:
+# To deploy the application using ansible on a K8S environment, run:
 ```
 make build-deploy-all
 ```
@@ -41,7 +41,7 @@ make build-deploy-all
 ```
 terraform destroy
 ```
-# To destroy the application by ansible on a K8S environment, run:
+# To destroy the application using ansible on a K8S environment, run:
 ```
 make destroy-all
 ```
