@@ -1,5 +1,5 @@
 # init the base image
-FROM python:3.8.0-buster as base
+FROM python:3.8.0-alpine as base
 #
 WORKDIR /app
 

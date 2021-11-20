@@ -3,7 +3,7 @@ services:
 ###########################
     labos:
         container_name: labos
-        image: labos:v1
+        image: labos:latest
         restart: always
         ports:
             - "5001:5001"
@@ -12,7 +12,7 @@ services:
             dockerfile: ./Dockerfile
             args:
                 - FLASK_APP=./customer/api/v1/main.py
-                - FLASK_RUN_PORT=5001
+                - FLASK_RUN_PORT=80
                 - APP=customer
         networks:
             - labos-net

@@ -13,7 +13,6 @@ application:
 ingress:
   name: basic-ingress
   namespace: default
-  lables:
-    app: sample
   spec:
+    app_name: sample
     port: 8080

@@ -1,0 +1,11 @@
+gcp_project: snappy-sight-332507
+gcp_cred_kind: serviceaccount
+gcp_cred_file: /etc/releai/keys/saar-cluster.json
+service_name: labos
+name_space: default
+app_label: labos
+container_port: 8080
+traget_port: 80
+image_name: wintrov/labos
+image_tag: latest
+app_liveget_path: /

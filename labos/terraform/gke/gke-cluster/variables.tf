@@ -17,3 +17,6 @@ variable "node_locations" {
 variable "name_space" {
   type = string
 }
+variable "machine_type" {
+  type = string
+}

@@ -19,3 +19,18 @@ variable "kubernetes_version" {
 variable "project_name" {
   type = string
 }
+variable "ingress_service_name" {
+  type = string
+}
+variable "ingress_port" {
+  type = number
+}
+variable "service_port" {
+  type = number
+}
+variable "service_name" {
+  type = string
+}
+variable "machine_type" {
+  type = string
+}

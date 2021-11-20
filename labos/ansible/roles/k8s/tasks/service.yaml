@@ -1,0 +1,19 @@
+- name: "{{ state }} a Service object"
+  community.kubernetes.k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "{{ service_name }}"
+        namespace: "{{ name_space }}"
+        labels:
+          app: "{{ app_label }}"
+      spec:
+        selector:
+          app: "{{ app_label }}"
+        type: NodePort
+        ports:
+        - port: "{{ container_port }}"
+          protocol: TCP
+          targetPort: "{{ traget_port }}"

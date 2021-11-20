@@ -6,6 +6,6 @@ metadata:
 spec:
   defaultBackend:
     service:
-      name: {{ .Values.ingress.lables.app }}
+      name: {{ .Values.ingress.spec.app_name }}
       port:
         number: {{ .Values.ingress.spec.port }}

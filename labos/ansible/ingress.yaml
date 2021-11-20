@@ -1,0 +1,8 @@
+
+- name: destroy deployment / service
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - vars/network/vars.yaml
+  tasks:
+    - include: roles/network/tasks/ingress.yaml

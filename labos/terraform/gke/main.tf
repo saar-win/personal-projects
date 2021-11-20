@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     kubernetes = {
-      source = "hashicorp/kubernetes"
+      source  = "hashicorp/kubernetes"
       version = ">= 2.0.3"
     }
     google = {
@@ -16,8 +16,8 @@ terraform {
 }
 
 provider "google" {
-    zone = var.google_zone
-    project  = var.project_name
+  zone    = var.google_zone
+  project = var.project_name
 }
 
 data "google_client_config" "default" {
@@ -26,7 +26,7 @@ data "google_client_config" "default" {
 
 data "google_container_cluster" "default" {
 
-  name = var.cluster_name
+  name       = var.cluster_name
   depends_on = [module.gke-cluster]
 }
 
@@ -49,18 +49,11 @@ provider "helm" {
 }
 
 module "gke-cluster" {
-  source              = "./gke-cluster"
-  cluster_name        = var.cluster_name
-  google_zone         = var.google_zone
-  node_locations      = var.node_locations
-  name_space          = var.name_space
-  kubernetes_version  = var.kubernetes_version
-
-}
-
-module "kubernetes-config" {
-  source              = "./kubernetes-config"
-  depends_on          = [module.gke-cluster]
-  cluster_name        = var.cluster_name
-  name_space          = var.name_space
+  source               = "./gke-cluster"
+  cluster_name         = var.cluster_name
+  google_zone          = var.google_zone
+  node_locations       = var.node_locations
+  name_space           = var.name_space
+  kubernetes_version   = var.kubernetes_version
+  machine_type         = var.machine_type
 }

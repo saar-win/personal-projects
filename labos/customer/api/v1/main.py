@@ -9,12 +9,12 @@ def send_hello_world():
     '''
     return { "message": "Hello World" }, 200
 
-@app.route("/", methods=["GET", "POST"] )
+@app.route("/", methods=["GET"] )
 def not_found():
     '''
     Handling with other kinds of request
     '''
-    return { "message": "Not Found!!" }, 404
+    return { "message": "success" }, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
