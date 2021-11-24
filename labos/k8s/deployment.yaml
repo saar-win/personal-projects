@@ -18,10 +18,3 @@ spec:
           ports:
             - containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: "/customer/v1"
-              port: 80
-            initialDelaySeconds: 10
-            failureThreshold: 3
-            periodSeconds: 10

@@ -24,3 +24,8 @@ curl http://${IP}/healthcheck
     id=one
         curl http://localhost:5000/get/{id}
 ```
+# Delete data from DB by the id, using:
+```
+    id=one
+        curl http://localhost:5000/delete/{id}
+```
