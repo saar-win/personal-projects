@@ -10,9 +10,9 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
-            args:
-                - FLASK_APP=./customer/api/v1/main.py
-                - FLASK_RUN_PORT=80
+        environment:
+                - FLASK_APP=./api/v1/main.py
+                - FLASK_RUN_PORT=5001
         networks:
             - labos-net
 ###########################
