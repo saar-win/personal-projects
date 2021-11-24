@@ -9,6 +9,14 @@ def send_hello_world():
     '''
     return { "message": "Hello World" }, 200
 
+
+@app.route("/healthz", methods=["GET"] )
+def healthz():
+    '''
+    Handling with other kinds of request
+    '''
+    return { "message": "success" }, 200
+
 @app.route("/", methods=["GET"] )
 def not_found():
     '''

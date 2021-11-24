@@ -22,10 +22,3 @@
                 ports:
                   - containerPort: "{{ container_port }}"
                     protocol: TCP
-                livenessProbe:
-                  httpGet:
-                    path: "{{ app_liveget_path }}"
-                    port: "{{ container_port }}"
-                  initialDelaySeconds: 10
-                  failureThreshold: 3
-                  periodSeconds: 10
