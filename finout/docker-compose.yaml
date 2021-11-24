@@ -21,11 +21,9 @@ services:
       build:
         context: .
         dockerfile: ./Dockerfile
-        args:
-          - FLASK_RUN_PORT=5001
-          - APP=movie
-          - FLASK_APP=./movie/api/v1/main.py
       environment:
+          - FLASK_RUN_PORT=5001
+          - FLASK_APP=./api/v1/main.py
           - FINOUT_SERVER_URL=http://finout:80
           - STORGE_FULL_PATH=/app/storage
       networks:

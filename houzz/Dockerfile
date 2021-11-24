@@ -24,15 +24,8 @@ RUN add-apt-repository ppa:deadsnakes/ppa
 # copy file
 COPY ./api/v1 ./api/v1
 
-# copy the req file
-COPY ../requirements.txt requirements.txt
-
 # install the req
-RUN pip install -r requirements.txt
-
-# defines the env var
-ENV FLASK_RUN_PORT=5000
-ENV FLASK_APP=./api/v1/main.py
+RUN pip install -r ./api/v1/requirements.txt
 
 # add user step
 RUN adduser --disabled-password --gecos '' test

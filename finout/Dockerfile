@@ -9,19 +9,10 @@ COPY ../package package
 
 # copy file
 ARG APP
-COPY ./${APP}/api/v1/main.py ./${APP}/api/v1/main.py
-
-# copy the req file
-COPY ../requirements.txt requirements.txt
+COPY ./api/v1 ./api/v1
 
 # install the req
-RUN pip install -r requirements.txt
-
-# defines the env var
-ARG FLASK_RUN_PORT
-ARG FLASK_APP
-ENV FLASK_RUN_PORT=${FLASK_RUN_PORT}
-ENV FLASK_APP=${FLASK_APP}
+RUN pip install -r ./api/v1/requirements.txt
 
 # set the python path
 ENV PYTHONPATH="${PYTHONPATH}:/app/package"

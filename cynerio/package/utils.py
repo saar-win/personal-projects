@@ -1,19 +1,19 @@
 import redis
 
-class Redis:
-    def ___init___(self):
+class Redis_actions:
+    def __init__(self, host):
         '''
         '''
-        self.r = redis.Redis(host='localhost', port=6379, db=0)
+        self.host = host
+        self.r = redis.Redis(host=self.host, port=6379, db=0)
 
-    def set_redis(self, key, val):
+    def set_redis(self, _id, data):
         '''
         '''
-        print(key, val)
-        # return self.r.set(key)
+        return self.r.set(_id, data)
 
     def get_redis(self, key):
         '''
         '''
-        ans = self.r.get(key)
-        return ans.decode('utf-8')
+        val = self.r.get(key)
+        return val.decode('utf-8')
