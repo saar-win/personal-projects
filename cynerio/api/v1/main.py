@@ -10,11 +10,10 @@ def write_to_redis():
     '''
     write to redis and returns 200
     '''
-    obj = json.loads(request.get_data().decode('utf-8'))
-    ans = _redis.set_redis(obj["id"], obj["data"])
-    if ans == True:
-        return jsonify({ "message": "Success" }), 200
-    else:
+    try:
+        if _redis.set_redis(request.get_data().decode('utf-8')) == True:
+            return jsonify({ "message": "Success" }), 200
+    except Exception:
         return jsonify({ "message": "Something went wrong" }), 500
 
 @app.route("/healthcheck", methods=["GET"] )

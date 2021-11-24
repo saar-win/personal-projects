@@ -1,4 +1,4 @@
-import redis
+import redis, json
 
 class Redis_actions:
     def __init__(self, host):
@@ -7,10 +7,11 @@ class Redis_actions:
         self.host = host
         self.r = redis.Redis(host=self.host, port=6379, db=0)
 
-    def set_redis(self, _id, data):
+    def set_redis(self, req):
         '''
         '''
-        return self.r.set(_id, data)
+        obj = json.loads(req)
+        return self.r.set(obj["id"], obj["data"])
 
     def get_redis(self, key):
         '''
