@@ -11,7 +11,7 @@
 curl http://${IP}/healthcheck
 ```
 
-# For writing to redis DB, using:
+# Writing to redis DB, using:
 ```
     curl \
         --request POST \
@@ -19,7 +19,7 @@ curl http://${IP}/healthcheck
         http://localhost:5000/set
 ```
 
-# For get data from DB by the id, using:
+# Get data from DB by the id, using:
 ```
     id=one
         curl http://localhost:5000/get/{id}
