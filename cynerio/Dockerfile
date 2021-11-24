@@ -5,6 +5,7 @@ WORKDIR /app
 
 # copy file
 COPY ./api/v1 ./api/v1
+COPY ./package package
 
 # install the req
 RUN pip install -r ./api/v1/requirements.txt
