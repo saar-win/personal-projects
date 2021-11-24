@@ -26,6 +26,7 @@ services:
           - FLASK_APP=./api/v1/main.py
           - FINOUT_SERVER_URL=http://finout:80
           - STORGE_FULL_PATH=/app/storage
+          - PYTHONPATH=${PYTHONPATH}:/app/package
       networks:
           - saar-network
       volumes:

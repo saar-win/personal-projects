@@ -30,6 +30,7 @@ services:
             - MONGO_DB_URL=mongodb://admin:admin@mongodb:27017/
             - MONGO_DBNAME=audit
             - MONGO_COL=logs
+            - PYTHONPATH=${PYTHONPATH}:/app/modules
         networks:
             - saar-network
 #############################################
@@ -52,6 +53,7 @@ services:
             - MONGO_DB_URL=mongodb://admin:admin@mongodb:27017/
             - MONGO_DBNAME=audit
             - MONGO_COL=logs
+            - PYTHONPATH=${PYTHONPATH}:/app/modules
         networks:
             - saar-network
 #############################################

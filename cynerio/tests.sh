@@ -80,5 +80,33 @@ if [[ $output != '{"one":"one"}' ]]; then
     exit 1
 fi
 
+output=$(curl \
+    --write-out '%{http_code}' \
+    --silent \
+    --output /dev/null \
+    http://localhost:5000/delete/one)
+if [[ $output != '200' ]]; then
+    echo "ERROR: /delete/one request did not return 200. Got instead $output"
+    exit 1
+fi
+
+output=$(curl \
+    --fail \
+    --silent \
+    http://localhost:5000/delete/two)
+if [[ $output != '{"message":"Something went wrong"}' ]]; then
+    echo "ERROR: /delete/one request got unexpected output: $output"
+    exit 1
+fi
+
+output=$(curl \
+    --write-out '%{http_code}' \
+    --silent \
+    --output /dev/null \
+    http://localhost:5000/delete/two)
+if [[ $output != '500' ]]; then
+    echo "ERROR: /delete/one request got unexpected output: $output"
+    exit 1
+fi
 
 echo "COMPLETED SUCCESSFULLY"

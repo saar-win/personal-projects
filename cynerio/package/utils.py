@@ -7,14 +7,26 @@ class Redis_actions:
         self.host = host
         self.r = redis.Redis(host=self.host, port=6379, db=0)
 
-    def set_redis(self, req):
+    def set(self, req):
         '''
         '''
         obj = json.loads(req)
-        return self.r.set(obj["id"], obj["data"])
+        return self.r.set(obj["id"], obj["data"], ex=60)
 
-    def get_redis(self, key):
+    def get(self, key):
         '''
         '''
         val = self.r.get(key)
-        return val.decode('utf-8')
+        if val is not None:
+            return val.decode("utf-8")
+        else:
+            return None
+
+    def delete(self, key):
+        '''
+        '''
+        if self.get(key) != None:
+            val = self.r.delete(key)
+        else:
+            val = None
+        return val
