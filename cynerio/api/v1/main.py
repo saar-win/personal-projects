@@ -1,4 +1,4 @@
-import json, os
+import os
 from flask import Flask, request, jsonify
 from package.utils import *
 
