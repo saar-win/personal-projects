@@ -1,14 +1,13 @@
 import redis, yaml, json, os
 import requests, yaml, json
+import shutil
 
-path = "/Users/saarwintrov/devel/releai/personal-projects-1/immunai"
-files = os.listdir(path + "/objects/")
-
+path = f"{os.environ['FILE_PATH']}"
 
 class Redis_actions:
     def __init__(self, host):
         self.host = host
-        self.client = redis.Redis(host="redis_json_db", port=6379, decode_responses=True)
+        self.client = redis.Redis(host=host, port=6379, decode_responses=True)
 
     def read(self, file_name):
         '''
@@ -69,6 +68,5 @@ def get_starwars():
 def check_if_exist():
     '''
     '''
-    if len(files) != 0:
-        for file in files:
-            os.remove(path + "/objects/" + file)
+    shutil.rmtree(path + "/objects/")
+    os.mkdir(path + "/objects/")

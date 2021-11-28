@@ -1,0 +1,24 @@
+applications:
+  - name: immunai
+    namespace: default
+    lables:
+      app: immunai
+    deployment:
+        image: wintrov/immunai
+        tag: latest
+        spec:
+          port: 5000
+          targetPort: 5000
+  - name: redis-json-db
+    namespace: default
+    lables:
+      app: redis-json-db
+    deployment:
+        image: redislabs/rejson
+        tag: latest
+        spec:
+          port: 6379
+          targetPort: 6379
+configmap:
+  - name: immunai
+    namespace: default
