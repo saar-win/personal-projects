@@ -5,16 +5,16 @@
 - There is a cron job that runs once an hour.
 - The cronjob sending a curl request that writes to Redis the object that gets from the StarWars API
 - K8S included StatefulSet as a deployment to avoid loss of information.
-# to run locally, using:
+# To run locally, using:
 ```
 make docker-redis-run
 make docker-immunai-run
 ```
-# to run on k8s(kind), using:
+# To run on k8s(kind), using:
 ```
 make helm-apply
 ```
-# to delete from k8s(kind), using:
+# To delete from k8s(kind), using:
 ```
 make helm-delete
 ```
