@@ -11,7 +11,7 @@ applications:
         targetPort: 5000
       envFrom:
         name: immunai
-      replicas: 2
+      replicas: 1
       initContainers:
         state: true
         name: redis-json-db
@@ -28,7 +28,7 @@ applications:
         targetPort: 6379
       envFrom:
         name: immunai
-      replicas: 2
+      replicas: 1
       initContainers:
         state: false
 
@@ -44,3 +44,10 @@ configmap:
       value: ./api/v1/main.py
     - key: FLASK_ENV
       value: development
+
+cronjob:
+  - name: curl-req-pod
+    namespace: default
+    data:
+      app_trigger: immunai
+      time: "* 1 * * *"
