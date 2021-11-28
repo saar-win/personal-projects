@@ -1,0 +1,23 @@
+version: '3.6'
+services:
+#############################################
+    houzz:
+        container_name: houzz
+        image: houzz:latest
+        restart: always
+        ports:
+            - "8080:5001"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        environment:
+            - FLASK_RUN_PORT=5001
+            - FLASK_APP=./api/v1/main.py
+        networks:
+            - saar-network
+        volumes:
+            - "/Users/saarwintrov/devel/releai/personal-projects-1/houzz/api/v1:/app/api/v1"
+#############################################
+
+networks:
+    saar-network:

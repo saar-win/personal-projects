@@ -1,0 +1,11 @@
+- name: Create an instance
+  hosts: localhost
+  gather_facts: no
+  vars:
+    gcp_project: snappy-sight-332507
+    gcp_cred_kind: serviceaccount
+    gcp_cred_file: /etc/releai/keys/saar-cluster.json
+    zone: "us-central1-a"
+    region: "us-central1"
+  roles:
+    - gcp/create

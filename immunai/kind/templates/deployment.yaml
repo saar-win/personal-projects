@@ -1,0 +1,28 @@
+{{- range .Values.applications  }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  serviceName: "{{ .name }}"
+  replicas: {{ deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .lables.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .lables.app }}
+    spec:
+      containers:
+        - name:  {{ .name }}
+          image: "{{ .deployment.image }}:{{ .deployment.tag }}"
+          ports:
+            - containerPort: {{ .deployment.spec.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ .deployment.envFrom.name }}
+{{- end }}

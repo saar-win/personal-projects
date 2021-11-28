@@ -1,0 +1,6 @@
+**/__pycache__
+README.md
+**/**/.terraform
+**/**/.terraform.*
+**/**/*.tfstate
+**/**/**/terraform.*

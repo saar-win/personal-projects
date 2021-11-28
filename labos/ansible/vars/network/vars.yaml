@@ -1,0 +1,4 @@
+name_space: default
+service_target_port: 8080
+ingress_name: basic-ingress
+target_service_name: labos
