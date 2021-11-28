@@ -1,0 +1,30 @@
+{{- range .Values.applications }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .lables.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .lables.app }}
+    spec:
+      containers:
+        - name:  {{ .name }}
+          image: "{{ .deployment.image }}:{{ .deployment.tag }}"
+          ports:
+            - containerPort: {{ .deployment.spec.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/v1/write
+              port: 5000
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 10
+{{- end }}

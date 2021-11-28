@@ -1,0 +1,13 @@
+{{- range .Values.configmap }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+data:
+  REDIS_IP_SERVER: redis-json-db
+  FILE_PATH: /app
+  FLASK_APP: ./api/v1/main.py
+  FLASK_ENV: development
+{{- end }}

@@ -5,21 +5,27 @@ services:
       container_name: redis_json_db
       image: redislabs/rejson:latest
       restart: always
-      networks:
-          - saar-network
       ports:
         - 6379:6379
+      networks:
+        - saar-network
 #############################################
   immunai:
-      container_name: redis_json_db
-      image: redislabs/rejson:latest
+      container_name: immunai
+      image: immunai:latest
       restart: always
       ports:
         - 5000:5000
+      build:
+        context: ./application
+        dockerfile: ./Dockerfile
+      environment:
+        - REDIS_IP_SERVER=redis_json_db
+        - FILE_PATH=/app
+        - FLASK_APP=./api/v1/main.py
+        - FLASK_ENV=development
       networks:
         - saar-network
-      volumes:
-        - ./objects:/app/objects
 #############################################
 networks:
     saar-network:
