@@ -1,0 +1,21 @@
+{{- range .Values.cronjob  }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  schedule: "{{ .data.time }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .name }}
+            image: ekambaram/curl
+            restartPolicy: OnFailure
+            command: [ "curl" ]
+            args: [ "{{ .data.app_trigger }}:5000/api/v1/write" ]
+          restartPolicy: OnFailure
+{{- end }}

@@ -14,9 +14,4 @@ RUN pip install -r ./api/v1/requirements.txt
 ENV PYTHONPATH="${PYTHONPATH}:/app/package"
 
 # create a cron job
-RUN ln -sf /proc/1/fd/1 /var/log/app.log
-RUN echo '* * * * * curl localhost:5000/api/v1/write > /var/log/app.log' > /etc/crontabs/root
-
-# run the app
-RUN chmod +x ./scripts/*
-CMD [ "./scripts/entrypoint.sh" ]
+CMD [ "flask" , "run" , "--host=0.0.0.0" ]
