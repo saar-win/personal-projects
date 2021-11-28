@@ -12,6 +12,9 @@ applications:
       envFrom:
         name: immunai
       replicas: 2
+      initContainers:
+        state: true
+        name: redis-json-db
 
   - name: redis-json-db
     namespace: default
@@ -26,6 +29,8 @@ applications:
       envFrom:
         name: immunai
       replicas: 2
+      initContainers:
+        state: false
 
 configmap:
   - name: immunai
