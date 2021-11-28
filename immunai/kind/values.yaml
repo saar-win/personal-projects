@@ -4,21 +4,38 @@ applications:
     lables:
       app: immunai
     deployment:
-        image: wintrov/immunai
-        tag: latest
-        spec:
-          port: 5000
-          targetPort: 5000
+      image: wintrov/immunai
+      tag: latest
+      spec:
+        port: 5000
+        targetPort: 5000
+      envFrom:
+        name: immunai
+      replicas: 2
+
   - name: redis-json-db
     namespace: default
     lables:
       app: redis-json-db
     deployment:
-        image: redislabs/rejson
-        tag: latest
-        spec:
-          port: 6379
-          targetPort: 6379
+      image: redislabs/rejson
+      tag: latest
+      spec:
+        port: 6379
+        targetPort: 6379
+      envFrom:
+        name: immunai
+      replicas: 2
+
 configmap:
   - name: immunai
     namespace: default
+    data:
+    - key: REDIS_IP_SERVER
+      value: redis-json-db
+    - key: FILE_PATH
+      value: /app
+    - key: FLASK_APP
+      value: ./api/v1/main.py
+    - key: FLASK_ENV
+      value: development

@@ -1,11 +1,13 @@
-{{- range .Values.applications }}
+{{- range .Values.applications  }}
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .name }}
   namespace: {{ .namespace }}
 spec:
+  serviceName: "{{ .name }}"
+  replicas: {{ deployment.replicas }}
   selector:
     matchLabels:
       app: {{ .lables.app }}
@@ -20,11 +22,7 @@ spec:
           ports:
             - containerPort: {{ .deployment.spec.port }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /api/v1/write
-              port: 5000
-            initialDelaySeconds: 10
-            failureThreshold: 3
-            periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: {{ .deployment.envFrom.name }}
 {{- end }}

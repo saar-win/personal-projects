@@ -14,3 +14,6 @@ helm-apply:
 
 helm-delete:
 	helm template kind | kubectl delete -f-
+
+port-forward:
+	kubectl port-forward --address localhost,0.0.0.0 service/immunai 5000:5000
