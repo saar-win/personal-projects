@@ -1,7 +1,7 @@
 ### This python script creates a VM for the development team
 
 
-- a helper Makefile for easy control.
+- A helper Makefile for easy control.
 - All processes will create automatically when the VM will go up by the startup script:
     - Create firewall.
     - Create a persistent disk for postgress app.
