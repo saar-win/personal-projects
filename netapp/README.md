@@ -15,7 +15,7 @@ make create_vm
 ```
 make delete_vm
 ```
-# To delete in addition the persistent disk (for postgress), using:
+# To delete in addition the persistent postgress disk using:
 ```
 make delete_vm_disk
 ```

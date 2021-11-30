@@ -10,6 +10,9 @@ path = f"{os.environ['FILE_PATH']}"
 @app.route("/api/v1/write")
 def write_to_redis():
     '''
+    Get the object from the Starwars api
+    write it to file
+    write it to redis
     '''
     check_if_exist()
     get_starwars()
@@ -22,6 +25,7 @@ def write_to_redis():
 @app.route("/api/v1/read")
 def read_from_redis():
     '''
+    Read the object from redis json service
     '''
     data = []
     files = os.listdir(path + "/objects/")
