@@ -73,7 +73,7 @@ def vm_firewall(compute, vars, action):
     '''
     firewalls = [
     {
-        "name": "vm-demo-firewall-allowed",
+        "name": "vm-demo-firewall-allow",
         "priority": "500",
         "targetTags": [ "http-server", "https-server" ],
         "allowed":
@@ -81,10 +81,10 @@ def vm_firewall(compute, vars, action):
             { "IPProtocol": "tcp", "ports": [ "80" ] },
             { "IPProtocol": "tcp", "ports": [ "443" ] }
         ],
-        "sourceRanges": [ vars["allowed_to_connect"] ],
+        "sourceRanges": [ vars["allow_to_connect"] ],
     },
     {
-        "name": "vm-demo-firewall-denied",
+        "name": "vm-demo-firewall-deny",
         "priority": "1000",
         "targetTags": [ "http-server", "https-server" ],
         "denied":
@@ -92,7 +92,7 @@ def vm_firewall(compute, vars, action):
             { "IPProtocol": "tcp", "ports": [ "80" ] },
             { "IPProtocol": "tcp", "ports": [ "443" ] }
         ],
-        "sourceRanges": [ vars["denied_to_connect"] ],
+        "sourceRanges": [ vars["deny_to_connect"] ],
     }
     ]
     if action == "create":
