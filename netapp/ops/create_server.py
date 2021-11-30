@@ -1,5 +1,5 @@
 import click
-import time, yaml, os
+import time, yaml, os, json
 import googleapiclient.discovery
 
 path = os.path.abspath(".")
@@ -71,23 +71,40 @@ def create_instance(compute, project, zone, machine, name, image, disk_size, per
 def vm_firewall(compute, vars, action):
     '''
     '''
-    firewall_body = {
-        "name": "vm-demo-firewall",
+    firewalls = [
+    {
+        "name": "vm-demo-firewall-allowed",
+        "priority": "500",
         "targetTags": [ "http-server", "https-server" ],
         "allowed":
         [
             { "IPProtocol": "tcp", "ports": [ "80" ] },
             { "IPProtocol": "tcp", "ports": [ "443" ] }
-        ]
+        ],
+        "sourceRanges": [ vars["allowed_to_connect"] ],
+    },
+    {
+        "name": "vm-demo-firewall-denied",
+        "priority": "1000",
+        "targetTags": [ "http-server", "https-server" ],
+        "denied":
+        [
+            { "IPProtocol": "tcp", "ports": [ "80" ] },
+            { "IPProtocol": "tcp", "ports": [ "443" ] }
+        ],
+        "sourceRanges": [ vars["denied_to_connect"] ],
     }
+    ]
     if action == "create":
         try:
-            compute.firewalls().insert(project=vars['project_id'], body=firewall_body).execute()
+            for firewall in firewalls:
+                compute.firewalls().insert(project=vars['project_id'], body=firewall).execute()
         except Exception as e:
             raise Exception(e)
     if action == "delete":
         try:
-            compute.firewalls().delete(project=vars['project_id'], firewall='vm-demo-firewall').execute()
+            for firewall in firewalls:
+                compute.firewalls().delete(project=vars['project_id'], firewall=firewall['name']).execute()
         except Exception as e:
             raise Exception(e)
 
@@ -166,7 +183,10 @@ def create_vm(vars):
     print('Instance in project %s and zone %s:' % (vars["project_id"], vars["zone"]))
     for instance in instances:
         url = f"https://console.cloud.google.com/compute/instancesDetail/zones/{vars['zone']}/instances/{instance['name']}?project={vars['project_id']}"
+        for network in instance["networkInterfaces"][0]["accessConfigs"]: server_ip = network["natIP"]
         print(' - ' + url)
+        print(' - ' + server_ip)
+        print(' ----------- ')
 
 def variable():
     '''

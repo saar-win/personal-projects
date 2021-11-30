@@ -9,3 +9,5 @@ vm_settings:
     disk_size: 150
     persistent_disk: postgress
     persistent_size: 10
+    allowed_to_connect: "46.117.240.41"
+    denied_to_connect: "0.0.0.0/0"
