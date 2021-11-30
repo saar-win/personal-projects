@@ -7,7 +7,7 @@
     - Create a persistent disk for postgress app.
     - Run a docker file with nginx ,postgress, flask-hello-world.
     - There is a variable yaml that discribes the all information that we want to.
-# To run the VM using:
+# To create the VM using:
 ```
 make create_vm
 ```
