@@ -1,6 +1,6 @@
-# This script creates a local VM server by Vagrant.
+# This script creates a local VM server using Vagrant.
 
-- The script can be run in two ways:
+- The script can be executed in two ways:
     - Create a VM by Vagrant with Ansible.
     - Create a VM by Vagrant with Terraform.
 
