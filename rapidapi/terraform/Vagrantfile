@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # image
+  config.vm.box = "hashicorp/bionic64"
+
+  # network
+  config.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
+  config.vm.network "private_network", type: "dhcp"
+
+  # nfs
+  config.vm.synced_folder "./provisioning", "/vagrant", :nfs => true
+  config.vm.synced_folder "./scripts", "/vagrant/scripts", :nfs => true
+
+  # vm settings
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "saar-local-vm"
+    vb.cpus = 1
+    vb.memory = 1024
+    vb.gui = false
+    vb.functional_vboxsf = false
+    vb.check_guest_additions = false
+  end
+
+  # install terraform
+  config.vm.provision "shell",
+    inline: "bash /vagrant/scripts/terraform.sh"
+
+    # ssh
+  config.ssh.insert_key = false
+  config.ssh.forward_agent = true
+
+  # install docker
+  config.vm.provision :docker
+
+  # init and install nginx
+  config.vm.provision "shell",
+    inline: "cd /vagrant && terraform init && terraform apply -auto-approve"
+end

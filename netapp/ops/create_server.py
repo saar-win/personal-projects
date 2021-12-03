@@ -128,7 +128,7 @@ def persistent_disk(compute, vars, action):
     '''
     if action == "delete":
         print("Deleting persistent disk")
-        operation = compute.disks().delete(project=vars['project_id'], zone=vars['zone'], disk=vars["persistent_disk"]).execute()
+        operation = compute.disks().delete(project=vars['project_id'], zone=vars['zone'], disk=vars["persistent_disk_name"]).execute()
         return operation
 
     if disk_list(compute, vars):

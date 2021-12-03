@@ -1,0 +1,7 @@
+
+- name: run docker-compose services
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: docker-compose
+      command: docker-compose -f ./docker/docker-compose.yaml up -d web
