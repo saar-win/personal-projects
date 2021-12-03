@@ -9,5 +9,6 @@
 7. Check the phone numbers if they're valid Whatsapp numbers
 8.
 9.
-
-**Every project based on python code**
+10.
+11.
+12.
