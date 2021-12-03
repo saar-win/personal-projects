@@ -27,7 +27,6 @@ Vagrant.configure("2") do |config|
 
   # ssh
   config.ssh.insert_key = false
-  config.ssh.forward_agent = true
 
   # install docker
   config.vm.provision :docker
