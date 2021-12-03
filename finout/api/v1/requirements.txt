@@ -1,0 +1,5 @@
+Flask==1.1.2
+requests==2.24.0
+python-dotenv==0.19.2
+Flask-APScheduler==1.12.2
+tzlocal==2.1

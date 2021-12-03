@@ -1,0 +1,69 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.3"
+    }
+    google = {
+      source  = "hashicorp/google"
+      version = "3.52"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.1.0"
+    }
+  }
+}
+
+provider "google" {
+  zone    = var.google_zone
+  project = var.project_name
+}
+
+data "google_client_config" "default" {
+  depends_on = [module.gke-cluster]
+}
+
+data "google_container_cluster" "default" {
+
+  name       = var.cluster_name
+  depends_on = [module.gke-cluster]
+}
+
+provider "kubernetes" {
+  host  = "https://${data.google_container_cluster.default.endpoint}"
+  token = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(data.google_container_cluster.default.master_auth[0].cluster_ca_certificate,
+  )
+}
+# provider "kubernetes" {
+#   config_path    = "~/.kube/config"
+#   config_context = "gke_snappy-sight-332507_europe-west3_saar-cluster"
+# }
+
+provider "helm" {
+  kubernetes {
+    host                   = "https://${data.google_container_cluster.default.endpoint}"
+    token                  = data.google_client_config.default.access_token
+    cluster_ca_certificate = base64decode(data.google_container_cluster.default.master_auth[0].cluster_ca_certificate)
+  }
+}
+
+module "gke-cluster" {
+  source               = "./gke-cluster"
+  cluster_name         = var.cluster_name
+  google_zone          = var.google_zone
+  node_locations       = var.node_locations
+  name_space           = var.name_space
+  kubernetes_version   = var.kubernetes_version
+  machine_type         = var.machine_type
+}
+
+module "air-flow" {
+  source                     = "./applications/airflow"
+  namespace                  = "airflow"
+  ingress_class              = "nginx"
+  chart_version              = "8.5.2"
+  google_oauth_client_id     = "888996088256-compute@developer.gserviceaccount.com"
+  google_oauth_client_secret = "XXXXX"
+}

@@ -1,0 +1,35 @@
+{{- range .Values.applications  }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  serviceName: "{{ .name }}"
+  replicas: {{ .deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .lables.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .lables.app }}
+    spec:
+      containers:
+        - name:  {{ .name }}
+          image: "{{ .deployment.image }}:{{ .deployment.tag }}"
+          ports:
+            - containerPort: {{ .deployment.spec.port }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ .deployment.envFrom.name }}
+      {{ if .deployment.initContainers.state }}
+      initContainers:
+        - name: init-myservice
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup '{{ .deployment.initContainers.name }}'.default.svc.cluster.local; do echo waiting for '{{ .deployment.initContainers.name }}' services; sleep 5; done"]
+      {{ else }}
+  {{- end }}
+{{- end }}

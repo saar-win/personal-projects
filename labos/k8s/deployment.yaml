@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: labos
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: labos
+  template:
+    metadata:
+      labels:
+        app: labos
+    spec:
+      containers:
+        - name: labos
+          image: wintrov/labos:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP

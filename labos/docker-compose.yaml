@@ -1,0 +1,20 @@
+version: '3.6'
+services:
+###########################
+    labos:
+        container_name: labos
+        image: labos:latest
+        restart: always
+        ports:
+            - "5001:5001"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        environment:
+                - FLASK_APP=./api/v1/main.py
+                - FLASK_RUN_PORT=5001
+        networks:
+            - labos-net
+###########################
+networks:
+    labos-net:

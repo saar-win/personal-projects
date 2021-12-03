@@ -1,0 +1,17 @@
+{{- range .Values.applications }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  selector:
+    app: {{ .lables.app }}
+  type: NodePort
+  ports:
+    - port: {{ .deployment.spec.port }}
+      protocol: TCP
+      targetPort: {{ .deployment.spec.targetPort }}
+
+{{- end }}

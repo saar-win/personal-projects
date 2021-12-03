@@ -1,0 +1,35 @@
+- name: destroy a disk
+  gcp_compute_disk:
+      name: 'disk-instance'
+      size_gb: 50
+      source_image: 'projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts'
+      zone: "{{ zone }}"
+      project: "{{ gcp_project }}"
+      auth_kind: "{{ gcp_cred_kind }}"
+      service_account_file: "{{ gcp_cred_file }}"
+      scopes:
+        - https://www.googleapis.com/auth/compute
+      state: present
+  register: disk
+- name: destroy a address
+  gcp_compute_address:
+      name: 'address-instance'
+      region: "{{ region }}"
+      project: "{{ gcp_project }}"
+      auth_kind: "{{ gcp_cred_kind }}"
+      service_account_file: "{{ gcp_cred_file }}"
+      scopes:
+        - https://www.googleapis.com/auth/compute
+      state: present
+
+- name: destroy a instance
+  gcp_compute_instance:
+      state: present
+      name: test-vm
+      machine_type: n1-standard-1
+      zone: "{{ zone }}"
+      project: "{{ gcp_project }}"
+      auth_kind: "{{ gcp_cred_kind }}"
+      service_account_file: "{{ gcp_cred_file }}"
+      scopes:
+        - https://www.googleapis.com/auth/compute

@@ -1,0 +1,31 @@
+version: '3.6'
+services:
+#############################################
+    logging:
+        container_name: logging
+        image: logging
+        restart: always
+        ports:
+            - "5001:5001"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+            - FLASK_APP=main.py
+            - FLASK_PORT=5001
+            - SAAR_CHANNEL=""
+            - RELEAI_CHANNEL=""
+            - GOOGLE_PASS=""
+            - GOOGLE_AUTH=""
+            - GOOGLE_USER=""
+            - RELE_PAYMENTS=""
+            - RELEI_LOGGING=""
+            - SAAR_CHANNEL=""
+
+        networks:
+            - rb-logging
+        volumes:
+            - /etc/releai/keys/releai-bot-dev.json:/etc/releai/keys/releai-bot-dev.json
+            - /etc/releai/keys/releai-bot-prod.json:/etc/releai/keys/releai-bot-prod.json
+networks:
+    rb-logging:
