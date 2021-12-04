@@ -1,36 +1,49 @@
-variable "cluster_name" {
-  type = string
+variable "project_id" {
+  type        = string
+  description = "The project ID to create the cluster."
 }
-variable "google_zone" {
-  type = string
+
+variable "region" {
+  type        = string
+  description = "The region to create the cluster."
 }
-variable "node_locations" {
-  type = string
+
+variable "zones" {
+  type        = list(string)
+  description = "The zones to create the cluster."
 }
-variable "workers_count" {
-  type = number
+
+variable "name" {
+  type        = string
+  description = "The name of the cluster."
 }
-variable "name_space" {
-  type = string
-}
-variable "kubernetes_version" {
-  type = string
-}
-variable "project_name" {
-  type = string
-}
-variable "ingress_service_name" {
-  type = string
-}
-variable "ingress_port" {
-  type = number
-}
-variable "service_port" {
-  type = number
-}
-variable "service_name" {
-  type = string
-}
+
 variable "machine_type" {
-  type = string
+  type        = string
+  description = "Type of the node compute engines."
 }
+
+variable "min_count" {
+  type        = number
+  description = "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
+}
+
+variable "max_count" {
+  type        = number
+  description = "Maximum number of nodes in the NodePool. Must be >= min_node_count."
+}
+
+variable "disk_size_gb" {
+  type        = number
+  description = "Size of the node's disk."
+}
+
+variable "service_account" {
+  type        = string
+  description = "The service account to run nodes as if not overridden in `node_pools`. The create_service_account variable default value (true) will cause a cluster-specific service account to be created."
+}
+
+# variable "initial_node_count" {
+#   type        = number
+#   description = "The number of nodes to create in this cluster's default node pool."
+# }
