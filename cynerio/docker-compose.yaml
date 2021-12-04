@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+#############################################
+    cynerio:
+        container_name: cynerio
+        image: cynerio:latest
+        restart: always
+        depends_on:
+            - redis
+        ports:
+            - "5000:5000"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        environment:
+              - REDIS_HOST=redis_db
+              - FLASK_APP=./api/v1/main.py
+              - PYTHONPATH=${PYTHONPATH}:/app/package
+        networks:
+            - saar-network
+#############################################
+    redis:
+        container_name: redis_db
+        image: redis:latest
+        restart: always
+        networks:
+            - saar-network
+        volumes:
+            - ./data:/data
+#############################################
+
+networks:
+    saar-network:

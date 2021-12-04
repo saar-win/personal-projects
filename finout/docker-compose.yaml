@@ -1,0 +1,36 @@
+version: '3.6'
+services:
+###########################
+  finout:
+      container_name: finout
+      image: finout/finout-movies:latest
+      restart: always
+      ports:
+          - "80:80"
+      networks:
+          - saar-network
+###########################
+  saar_app:
+      container_name: saar_app
+      image: saar_app:v1
+      restart: always
+      depends_on:
+            - finout
+      ports:
+          - "5001:5001"
+      build:
+        context: .
+        dockerfile: ./Dockerfile
+      environment:
+          - FLASK_RUN_PORT=5001
+          - FLASK_APP=./api/v1/main.py
+          - FINOUT_SERVER_URL=http://finout:80
+          - STORGE_FULL_PATH=/app/storage
+          - PYTHONPATH=${PYTHONPATH}:/app/package
+      networks:
+          - saar-network
+      volumes:
+          - "/Users/saarwintrov/saar/data:/app/storage"
+###########################
+networks:
+    saar-network:

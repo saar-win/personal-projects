@@ -1,0 +1,75 @@
+name: build-and-deploy-eks
+on:
+  push:
+        paths:
+          - 'reali.com/**'
+        branches:
+          - main
+jobs:
+  BUILD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Build & Push to Docker Hub
+        uses: opspresso/action-docker@master
+        with:
+          args: --docker
+        env:
+          IMAGE_NAME: wintrov/reali
+          REGISTRY: docker.io
+          USERNAME: wintrov
+          PASSWORD: Aa123456789
+          TAG_NAME: "latest"
+          DOCKERFILE: ./reali.com/app/Dockerfile
+          BUILD_PATH: ./reali.com/app
+
+  DEPLOY:
+    runs-on: ubuntu-latest
+    needs:
+      - BUILD
+    outputs:
+      basic-ingress: ${{ steps.set-ingress.outputs.ingress-address }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Server address
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Trigger deploy
+        uses: Consensys/kubernetes-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f ./reali.com/ops
+      - name: Sleep for 50 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '50s'
+      - name: Defines the ingress
+        id: ingress
+        uses: Consensys/kubernetes-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: get ingress basic-ingress --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+      - name: Print image
+        id: set-ingress
+        run:
+          echo "::set-output name=ingress-address::${{ steps.ingress.outputs.result }}"
+
+  CURL:
+    runs-on: ubuntu-latest
+    needs:
+      - DEPLOY
+    env:
+      INGRESS-ADDRESS: ${{ needs.DEPLOY.outputs.basic-ingress }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: curl to the application
+        run: |
+          curl ${{ env.INGRESS-ADDRESS }}

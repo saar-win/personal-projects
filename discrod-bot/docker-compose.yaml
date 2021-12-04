@@ -1,0 +1,26 @@
+ersion: '3.6'
+
+services:
+#############################################
+    discord_backup:
+        container_name: discord_bot
+        image: discord_bot
+        restart: always
+        ports:
+            - "5002:5002"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+            args:
+                - FLASK_APP=main.py
+                - FLASK_PORT=5001
+                - SAAR_CHANNEL=""
+                - RELEAI_CHANNEL=""
+        networks:
+            - rb-discord
+        volumes:
+            - /etc/releai/keys/releai-bot-dev.json:/etc/releai/keys/releai-bot-dev.json
+            - /etc/releai/keys/releai-bot-prod.json:/etc/releai/keys/releai-bot-prod.json
+############################################
+networks:
+    rb-discord:

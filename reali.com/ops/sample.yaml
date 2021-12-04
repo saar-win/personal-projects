@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple
+spec:
+  selector:
+    matchLabels:
+      app: simple
+  template:
+    metadata:
+      labels:
+        app: simple
+    spec:
+      containers:
+        - name: simple
+          image: docker.io/wintrov/reali:latest
+          ports:
+            - protocol: TCP
+              containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple
+spec:
+  type: ClusterIP
+  selector:
+    app: simple
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000

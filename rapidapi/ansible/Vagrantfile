@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # image
+  config.vm.box = "hashicorp/bionic64"
+
+  # network
+  config.vm.network "forwarded_port", guest: 80, host: 80, auto_correct: true
+  config.vm.network "private_network", type: "dhcp"
+
+  # nfs
+  config.vm.synced_folder "./provisioning", "/vagrant", :nfs => true
+
+  # plugins
+  config.vagrant.plugins = [ "vagrant-docker-compose" ]
+
+  # vm settings
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "saar-local-vm"
+    vb.cpus = 1
+    vb.memory = 1024
+    vb.gui = false
+    vb.functional_vboxsf = false
+    vb.check_guest_additions = false
+  end
+
+  # ssh
+  config.ssh.insert_key = false
+
+  # install docker
+  config.vm.provision :docker
+  config.vm.provision :docker_compose
+
+  # install nginx
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "/vagrant/playbook.yaml"
+  end
+
+end

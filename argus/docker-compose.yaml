@@ -1,0 +1,21 @@
+version: '3.6'
+services:
+#############################################
+    sample:
+        container_name: sample
+        image: sample:latest
+        restart: always
+        ports:
+            - "80:5001"
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        environment:
+            - FLASK_RUN_PORT=50001
+            - FLASK_APP=sample/api/v1/main.py
+        networks:
+            - saar-network
+#############################################
+
+networks:
+    saar-network:
