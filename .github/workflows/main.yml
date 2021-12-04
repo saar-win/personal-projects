@@ -19,7 +19,8 @@ jobs:
           image: wintrov/reali
           tags: latest
           registry: docker.io
-          dockerfile: app/Dockerfile
+          directory: app
+          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
