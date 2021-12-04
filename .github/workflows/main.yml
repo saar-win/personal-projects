@@ -12,7 +12,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Get into reali dir
-      - run: cd reali.com
+        run: cd reali.com
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
