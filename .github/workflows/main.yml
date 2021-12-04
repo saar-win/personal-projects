@@ -1,0 +1,21 @@
+name: build-and-deploy-eks
+on:
+  pull_request:
+        paths:
+          - 'reali.com/**'
+        branches:
+          - master
+jobs:
+  BUILD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build the image
+      - run: |
+          echo "test"
+          
+  DEPLOY:
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy the service
+      - run: |
+          echo "test"
