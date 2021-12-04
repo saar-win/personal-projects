@@ -4,7 +4,7 @@ on:
         paths:
           - 'reali.com/**'
         branches:
-          - master
+          - main
 jobs:
   BUILD:
     runs-on: ubuntu-latest
