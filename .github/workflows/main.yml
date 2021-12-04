@@ -27,6 +27,20 @@ jobs:
   DEPLOY:
     runs-on: ubuntu-latest
     steps:
-      - name: deploy the service
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: change dir
         run: |
-          echo "test"
+          cd releai
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Trigger deploy
+        uses: Consensys/kubernetes-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply ops/
