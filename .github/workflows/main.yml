@@ -12,14 +12,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Get into reali dir
-        run: cd reali.com
+        run: cd reali.com && ls -l
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: wintrov/reali
           tags: latest
           registry: docker.io
-          directory: app
+          directory: reali.com/app
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
