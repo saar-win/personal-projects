@@ -17,5 +17,6 @@ make docker push
 ```
 ### To connect to the cluster, using:
 ```
+aws sts get-caller-identity
 aws eks --region region update-kubeconfig --name cluster_name
 ```
