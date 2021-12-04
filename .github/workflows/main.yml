@@ -45,4 +45,3 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply reali.com/ops/*.yaml
-##
