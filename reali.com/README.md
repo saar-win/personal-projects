@@ -1,7 +1,8 @@
 # Create a deployment process on a EKS cluster
 
-- Github actions create the process, triggered by pr.
+- Push to git will create the process.
 - A helper Makefile for easy control.
+
 ### macOS deps:
 ```
 brew install awscli \
