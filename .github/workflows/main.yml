@@ -5,6 +5,7 @@ on:
           - 'reali.com/**'
         branches:
           - reali/actions
+          - main
 jobs:
   BUILD:
     runs-on: ubuntu-latest
