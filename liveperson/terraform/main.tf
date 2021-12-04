@@ -16,8 +16,8 @@ terraform {
 }
 
 provider "google" {
-  zone    = var.google_zone
-  project = var.project_name
+  zone    = var.region
+  project = var.project_id
 }
 
 data "google_client_config" "default" {
@@ -26,7 +26,7 @@ data "google_client_config" "default" {
 
 data "google_container_cluster" "default" {
 
-  name       = var.cluster_name
+  name       = var.name
   depends_on = [module.gke-cluster]
 }
 
@@ -36,10 +36,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.google_container_cluster.default.master_auth[0].cluster_ca_certificate,
   )
 }
-# provider "kubernetes" {
-#   config_path    = "~/.kube/config"
-#   config_context = "gke_snappy-sight-332507_europe-west3_saar-cluster"
-# }
 
 provider "helm" {
   kubernetes {
@@ -51,19 +47,19 @@ provider "helm" {
 
 module "gke-cluster" {
   source               = "./gke-cluster"
-  cluster_name         = var.cluster_name
-  google_zone          = var.google_zone
-  node_locations       = var.node_locations
-  name_space           = var.name_space
-  kubernetes_version   = var.kubernetes_version
+  project_id           = var.project_id
+  name                 = var.name
+  region               = var.region
+  zones                = var.zones
+  service_account      = var.service_account
+  min_count            = var.min_count
+  max_count            = var.max_count
+  disk_size_gb         = var.disk_size_gb
   machine_type         = var.machine_type
 }
-
-module "air-flow" {
-  source                     = "./applications/airflow"
-  namespace                  = "airflow"
-  ingress_class              = "nginx"
-  chart_version              = "8.5.2"
-  google_oauth_client_id     = "888996088256-compute@developer.gserviceaccount.com"
-  google_oauth_client_secret = "XXXXX"
+module "airflow" {
+  source = "./airflow"
+}
+module "ingress" {
+  source = "./ingress"
 }

@@ -1,14 +1,9 @@
-## Values defenition ##
-
-cluster_name            = "saar-cluster1"
-project_name            = "snappy-sight-332507"
-google_zone             = "europe-west3"
-name_space              = "default"
-kubernetes_version      = "1.18"
-node_locations          = "europe-west3-a"
-workers_count           = "3"
-machine_type            = "n1-standard-4"
-ingress_service_name    = "basic-ingress"
-ingress_port            = 80
-service_name            = "hello"
-service_port            = 8080
+project_id          = "snappy-sight-332507"
+region              = "europe-west3"
+zones               = ["europe-west3-a", "europe-west3-b", "europe-west3-c"]
+name                = "gke-cluster"
+machine_type        = "e2-medium"
+min_count           = 1
+max_count           = 3
+disk_size_gb        = 10
+service_account     = "888996088256-compute@developer.gserviceaccount.com"
