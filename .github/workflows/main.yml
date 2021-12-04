@@ -13,8 +13,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Get into reali dir
         run: cd reali.com
-      - uses: mr-smithers-excellent/docker-build-push@v5
-        name: Build & push Docker image
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: wintrov/reali
           tags: latest
@@ -28,5 +28,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: deploy the service
-      - run: |
+        run: |
           echo "test"
