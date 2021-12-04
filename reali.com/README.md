@@ -6,7 +6,10 @@
 ```
 brew install awscli
 ```
-
+### On the cluster have to install a loadBalancer:
+```
+https://kubernetes.github.io/ingress-nginx/deploy/
+```
 ### To build the image, using:
 ```
 make docker-build
@@ -20,4 +23,3 @@ make docker push
 aws sts get-caller-identity
 aws eks --region region update-kubeconfig --name cluster_name
 ```
-##
