@@ -4,7 +4,8 @@
 - A helper Makefile for easy control.
 ### macOS deps:
 ```
-brew install awscli
+brew install awscli \
+brew install weaveworks/tap/eksctl
 ```
 ### On the cluster have to install a loadBalancer:
 ```
