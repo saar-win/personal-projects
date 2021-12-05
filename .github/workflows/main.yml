@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Server address
+      - name: Login to cluster
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -49,7 +49,7 @@ jobs:
         uses: jakejarvis/wait-action@master
         with:
           time: '50s'
-      - name: Defines the ingress
+      - name: Set the ingress address as env
         id: ingress
         uses: Consensys/kubernetes-action@master
         env:
