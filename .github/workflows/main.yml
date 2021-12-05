@@ -49,14 +49,14 @@ jobs:
         uses: jakejarvis/wait-action@master
         with:
           time: '50s'
-      - name: Set the ingress address as env
+      - name: Get ingress address
         id: ingress
         uses: Consensys/kubernetes-action@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: get ingress basic-ingress --output=jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-      - name: Print image
+      - name: Set the ingress address as env
         id: set-ingress
         run:
           echo "::set-output name=ingress-address::${{ steps.ingress.outputs.result }}"
