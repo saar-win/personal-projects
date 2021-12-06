@@ -1,7 +1,17 @@
-
-- name: run docker-compose services
-  hosts: all
-  gather_facts: no
+---
+- name: Task
+  hosts: localhost
   tasks:
-    - name: docker-compose
-      command: docker-compose -f ./docker/docker-compose.yaml up -d web
+    - name: "Install nginx"
+      community.docker.docker_compose:
+        project_name: nginx
+        definition:
+          version: '3.6'
+          services:
+            web:
+              image: nginx:latest
+              ports:
+                - "80:80"
+              environment:
+                - NGINX_HOST=localhost
+                - NGINX_PORT=80
