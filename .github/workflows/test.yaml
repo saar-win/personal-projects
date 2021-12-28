@@ -1,9 +1,12 @@
 name: build-and-deploy-eks
-on: ['deployment']
+on:
+  repository_dispatch:
+    types: [run_tests]
+name: Run tests
 jobs:
-  deployment:
+  test:
+    name: Run your tests
     runs-on: ubuntu-latest
     steps:
-        - name: TEST THE MANUAL WORKFLOW
-          run: |
-            echo "this is test !!"
+      - run: |
+          echo "I just ran all your tests!"
