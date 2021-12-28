@@ -1,7 +1,7 @@
-name: build-and-deploy-eks
 on:
   repository_dispatch:
     types: [run_tests]
+
 name: Run tests
 jobs:
   test:
