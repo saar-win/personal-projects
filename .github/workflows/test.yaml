@@ -1,13 +1,14 @@
+name: run-tests
 on:
   repository_dispatch:
-    types: [ run_tests ]
+    types:
+      - build
 
-name: Run tests
 jobs:
-  test:
-    name: Run your tests
+  build:
+    name: from curl requests
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo "I just ran all your tests!"
-          echo "payload: ${{ github.event.client_payload.key1 }}"
+          echo "payload: ${{ github.event.client_payload.var1 }}"
