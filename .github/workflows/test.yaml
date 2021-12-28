@@ -1,0 +1,12 @@
+name: build-and-deploy-eks
+on:
+  push:
+    branches:
+        - main
+jobs:
+  BUILD:
+    runs-on: ubuntu-latest
+    steps:
+        - name: TEST THE MANUAL WORKFLOW
+          run: |
+            echo "this is test !!"
