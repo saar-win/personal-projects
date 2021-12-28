@@ -1,10 +1,7 @@
 name: build-and-deploy-eks
-on:
-  push:
-    branches:
-        - main
+on: ['deployment']
 jobs:
-  BUILD:
+  deployment:
     runs-on: ubuntu-latest
     steps:
         - name: TEST THE MANUAL WORKFLOW
