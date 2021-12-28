@@ -10,4 +10,4 @@ jobs:
     steps:
       - run: |
           echo "I just ran all your tests!"
-          echo "payload: ${{ toJson(github.event.client_payload) }}"
+          echo "payload: ${{ github.event.client_payload.key1 }}"
