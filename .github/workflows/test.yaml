@@ -1,6 +1,6 @@
 on:
   repository_dispatch:
-    types: [run_tests]
+    types: [ run_tests ]
 
 name: Run tests
 jobs:
@@ -10,3 +10,4 @@ jobs:
     steps:
       - run: |
           echo "I just ran all your tests!"
+          'echo "payload: ${{ toJson(github.event.client_payload) }}"'
