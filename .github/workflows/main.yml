@@ -18,8 +18,8 @@ jobs:
         env:
           IMAGE_NAME: wintrov/reali
           REGISTRY: docker.io
-          USERNAME: wintrov
-          PASSWORD: Aa123456789
+          USERNAME: ${{ secret.DOCKER_USERNAME }}
+          PASSWORD: ${{ secret.DOCKER_PASSWORD }}
           TAG_NAME: "latest"
           DOCKERFILE: ./reali.com/app/Dockerfile
           BUILD_PATH: ./reali.com/app
