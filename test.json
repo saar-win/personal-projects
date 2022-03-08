@@ -1,5 +1,5 @@
 {
-    'data_classification': 'public',
-    'owner': 'devops',
-    'environment_name': 'test'
+    "data_classification": "public",
+    "owner": "devops",    
+    "environment_name": "test"
 }
