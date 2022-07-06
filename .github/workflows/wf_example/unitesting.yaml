@@ -1,0 +1,74 @@
+name: TEST CI
+on:
+  pull_request:
+    branches:
+      - dev
+  # push:
+  #   branches:
+  #     - dev
+
+jobs:
+  GET-MATRIX:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix-services: ${{ steps.services_list.outputs.matrix-services }}
+      matrix-packages: ${{ steps.packages_list.outputs.matrix-packages }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: get services names in array
+        id: services_list
+        run: |
+          cd $GITHUB_WORKSPACE/src && echo "::set-output name=matrix-services::$(ls|jq -cnR '[inputs | select(length>0)]')"
+      - name: get packages names in array
+        id: packages_list
+        run: |
+          cd $GITHUB_WORKSPACE/packages && echo "::set-output name=matrix-packages::$(ls|jq -cnR '[inputs | select(length>0)]')"
+
+  SERVICES-TEST:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      SERVICE: ${{ matrix.services }}
+      TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+      KIND: src
+    needs: GET-MATRIX
+    strategy:
+      fail-fast: false
+      matrix:
+        services: ${{ fromJson(needs.GET-MATRIX.outputs.matrix-services) }}
+        exclude:
+          - services: README.md
+          - services: salesforce
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pip deps
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Install the service && Run the test
+        run: |
+          cd src/$SERVICE && python3 $GITHUB_WORKSPACE/ops/github-actions/unittest/install-and-tests.py
+
+  PACKAGES-TEST:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      PACKAGE: ${{ matrix.packages }}
+      TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+      KIND: packages
+    needs: GET-MATRIX
+    strategy:
+      matrix:
+        packages: ${{ fromJson(needs.GET-MATRIX.outputs.matrix-packages) }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pip deps
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Install the package && Run the test
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/unittest/install-and-tests.py
+#

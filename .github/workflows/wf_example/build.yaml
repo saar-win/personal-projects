@@ -1,0 +1,251 @@
+name: BUILD-IMAGES
+on:
+  pull_request:
+    branches:
+      - dev
+    types: [closed]
+
+jobs:
+# this job just defining env variable, service list, package list
+  GET-MATRIX:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      matrix-services: ${{ steps.services_list.outputs.matrix-services }}
+      matrix-packages: ${{ steps.packages_list.outputs.matrix-packages }}
+      node-matrix-services: ${{ steps.services_list.outputs.node-matrix-services }}
+      go-matrix-services: ${{ steps.services_list.outputs.go-matrix-services }}
+      git-tag: ${{ steps.git.outputs.git-tag }}-${{ steps.git.outputs.sha_short }}
+      git-commit: ${{ steps.git.outputs.git-commit }}
+      pip-cache: ${{ steps.pip-cache.outputs.cache-hit }}
+      web-filter: ${{ steps.filter.outputs.web }}
+      functions-filter: ${{ steps.filter.outputs.functions }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Git deps
+        id: git
+        run: |
+          git fetch --prune --unshallow --tags
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=git-commit::$(git log -1 ${{ github.event.after }} --pretty=format:'%s')"
+          echo "::set-output name=git-tag::$(git tag --sort=-refname --list "v[0-9]*" | head -n 1)"
+      - name: Get services names in array
+        id: services_list
+        run: |
+          cd $GITHUB_WORKSPACE/src && echo "::set-output name=matrix-services::$(ls|jq -cnR '[inputs | select(length>0)]')"
+      - name: Get packages names in array
+        id: packages_list
+        run: |
+          cd $GITHUB_WORKSPACE/packages && echo "::set-output name=matrix-packages::$(ls|jq -cnR '[inputs | select(length>0)]')"
+      - uses: actions/cache@v1
+        id: pip-cache
+        with:
+          path: ~/.cache/pip
+          key: |
+            ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
+            ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'web/**'
+            functions:
+              - 'functions/**'
+            functions-handlers:
+              - 'functions/handlers/**'
+
+# create new config map
+  CREATE-CONFIGMAP:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+    needs: GET-MATRIX
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Install pip3 deps
+        # if: ${{ needs.GET-MATRIX.outputs.pip-cache != 'true' }}
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Create and deploy configMap
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/replace/configmap.py -e dev
+  NEW-PACKAGE-VERSION:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      GIT_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      PACKAGE: ${{ matrix.packages }}
+    needs:
+      - GET-MATRIX
+      - CREATE-CONFIGMAP
+    strategy:
+      fail-fast: false
+      matrix:
+        packages: "${{ fromJson(needs.GET-MATRIX.outputs.matrix-packages) }}"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2 ## https://github.com/dorny/paths-filter
+        id: changes
+        with:
+          filters: |
+            packages:
+              - 'packages/${{ env.PACKAGE }}/**'
+      - name: Install pip3 deps
+        # if: ${{ needs.GET-MATRIX.outputs.pip-cache != 'true' }}
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Increment the version of package
+        if: steps.changes.outputs.packages == 'true'
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/master/increment_version.py
+      - name: Commit & push changes
+        if: steps.changes.outputs.packages == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: This commit from Github Action for ${{ env.SERVICE }} package Version
+      - name: Publish the package
+        if: steps.changes.outputs.packages == 'true'
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ env.GIT_TOKEN }}" >> ~/.npmrc
+          cd packages/${{ env.PACKAGE }}/
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ## https://github.com/anothrNick/github-tag-action
+  ## the commit need to be: git commit "blabla #major"
+  ## the commit need to be: git commit "blabla #minor"
+  ## the commit need to be: git commit "blabla #patch"
+  ## the commit need to be: git commit "blabla #none"
+
+# this job made spacial for console
+  BUILD-WEB-IMAGE:
+    if: ${{ (github.event.pull_request.merged == true) && (needs.GET-MATRIX.outputs.web-filter == 'true' ) }}
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+      GITHUB_SRC_TAG: ${{ needs.GET-MATRIX.outputs.git-tag }}
+      SERVICE: console
+    needs:
+      - GET-MATRIX
+      - CREATE-CONFIGMAP
+      - NEW-PACKAGE-VERSION
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Build Console Image
+        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA_KEY_64 }}
+          registry: eu.gcr.io
+          project_id: releai-bot-dev
+          image_name: console
+          image_tag: ${{ needs.GET-MATRIX.outputs.git-tag }}
+          dockerfile: ./web/Dockerfile
+          context: ./web
+          build_args: FIRE_ENV=development,VUE_APP_FIRE_ENV=development
+      - name: Install pip3 deps
+        # if: ${{ needs.GET-MATRIX.outputs.pip-cache != 'true' }}
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Replace the image on k8s
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/replace/replace_image.py -e dev
+
+# this job build an image for every service
+  BUILD-DEPLOY-SERVICE-IMAGE:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      SERVICE: ${{ matrix.services }}
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+      GIT_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+      GITHUB_SRC_TAG: ${{ needs.GET-MATRIX.outputs.git-tag }}
+    needs:
+      - GET-MATRIX
+      - CREATE-CONFIGMAP
+      - NEW-PACKAGE-VERSION
+    strategy:
+      fail-fast: false
+      matrix:
+        services: "${{ fromJson(needs.GET-MATRIX.outputs.matrix-services) }}"
+        exclude:
+          - services: README.md
+          - services: salesforce
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GCP
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Install pip3 deps
+        # if: ${{ needs.GET-MATRIX.outputs.pip-cache != 'true' }}
+        run: |
+          pip3 install ${{ secrets.GIT_UTILS_REPO }}
+      - name: Run for create binary file for go services
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/build/for_go_src.py
+      - name: Build Images
+        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA_KEY_64 }}
+          registry: eu.gcr.io
+          project_id: releai-bot-dev
+          image_name: ${{ matrix.services }}
+          image_tag: ${{ needs.GET-MATRIX.outputs.git-tag }}
+          dockerfile: ./src/${{ matrix.services }}/Dockerfile
+          context: ./src/${{ matrix.services }}
+          build_args: GIT_TOKEN=${{ env.GIT_TOKEN }}
+      - name: Replace the image on k8s
+        run: |
+          python3 $GITHUB_WORKSPACE/ops/github-actions/replace/replace_image.py -e dev
+
+# deploy firebase functions
+  FIREBASE-FUNCTIONS:
+    if: ${{ (github.event.pull_request.merged == true) && (needs.GET-MATRIX.outputs.functions-filter == 'true' )}}
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      DEV_SECRETS: ${{ secrets.GCP_SA_KEY_64 }}
+      PROD_SECRETS: ${{ secrets.GCP_SA_KEY_PROD_64 }}
+      GIT_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+    needs:
+      - GET-MATRIX
+      - CREATE-CONFIGMAP
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Firebase tools
+        run: |
+          npm i -g firebase-tools@9.16.0
+      - name: Define environment variable
+        run: |
+          echo $DEV_SECRETS | base64 -d > $GITHUB_WORKSPACE/ops/keys/releai-bot-dev.json
+          echo //npm.pkg.github.com/:_authToken=$GIT_TOKEN > ~/.npmrc
+      - name: Deploy to Firebase
+        run: |
+          export GOOGLE_APPLICATION_CREDENTIALS=$GITHUB_WORKSPACE/ops/keys/releai-bot-dev.json
+          cd functions/
+          npm install
+          npm run deploy:dev
