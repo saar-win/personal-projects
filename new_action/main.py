@@ -48,7 +48,7 @@ def open_git_pr(branch_name):
     headers=headers
     )
     print(res.text)
-    if res is not None:
+    if res.ok:
         return res.json()
     else:
         raise Exception("Error creating PR")
