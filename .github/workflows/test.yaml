@@ -12,21 +12,15 @@ jobs:
       - name: test
         id: hello_world_step
         run: |
-          cd $GITHUB_WORKSPACE/new_action && echo "::set-output name=object_to_test::$(cat obj.json)"
-#############################################################################################
-      - name: just print
-        run: |
-          echo "${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}"
-        env:
-          TEST: '${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}'
+          cd $GITHUB_WORKSPACE/new_action && echo "::set-output name=test::$(cat obj.json | jq)"
 #############################################################################################
       - name: Hello world action step
         id: hello
         uses: saar-win/personal-projects/new_action@v2
         with:
-          key_1: ${{ steps.hello_world_step.outputs.object_to_test }}
+          key_1: ${{ steps.hello_world_step.outputs.test }}
         env:
-          TEST: ${{ steps.hello_world_step.outputs.object_to_test }}
+          TEST: ${{ steps.hello_world_step.outputs.test }}
 #############################################################################################
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
