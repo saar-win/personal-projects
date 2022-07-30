@@ -10,8 +10,9 @@ def main():
     '''
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
     print(yaml_file)
-    git_actions()
-    open_git_pr()
+    branch_name = f"test_{uuid.uuid4()}"
+    git_actions(branch_name)
+    open_git_pr(branch_name)
 
 def load_yaml(file_path):
     '''
@@ -19,17 +20,18 @@ def load_yaml(file_path):
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file
 
-def git_actions():
+def git_actions(branch_name):
     '''
     '''
-    subprocess.run("git checkout -b test", shell=True)
+
+    subprocess.run(f"git checkout -b {branch_name}", shell=True)
     subprocess.run("touch file.txt", shell=True)
     subprocess.run("git add -A", shell=True)
     subprocess.run("git commit -am test", shell=True)
-    subprocess.run("git push --set-upstream origin test", shell=True)
+    subprocess.run(f"git push --set-upstream origin {branch_name}", shell=True)
     # return
 
-def open_git_pr():
+def open_git_pr(branch_name):
     '''
     '''
     service_name = "test"
@@ -40,7 +42,7 @@ def open_git_pr():
         json={
             'title': 'New Action',
             'body': f'New service {service_name}',
-            'head': f'test_{uuid.uuid4()}',
+            'head': f'{branch_name}',
             'base': 'master'
         },
     headers=headers
