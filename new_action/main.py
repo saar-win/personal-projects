@@ -11,8 +11,9 @@ def main():
     current_time = now.strftime("%H:%M:%S")
     subprocess.run(f'echo "::set-output name=time::{current_time}"', shell=True)
     subprocess.run(f'ls -l', shell=True)
-    var = sys.argv[1]
-    print(var)
+    _file = sys.argv[1]
+    with open(_file, 'r') as f:
+        print(f.read())
 
 if __name__ == '__main__':
     main()
