@@ -38,7 +38,7 @@ def open_git_pr(branch_name):
     token = {os.getenv('INPUT_ACTIONS_ACCESS_USERNAME') + ":" + os.getenv('INPUT_ACTIONS_ACCESS_KEY')}
     headers = {
         "Accept": "application/vnd.github.v3+json",
-        "Authorization": f"token {token}"
+        "Authorization": f"token {os.getenv('INPUT_ACTIONS_ACCESS_KEY')}"
     }
     json={
         'title': 'New Action',
