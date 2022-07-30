@@ -1,0 +1,23 @@
+# action.yml
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  ACTIONS_ACCESS_USERNAME:
+    description: 'User name for the github account'
+    required: false
+    default: '{{ secrets.GITHUB_USERNAME }}'
+  ACTIONS_ACCESS_KEY:
+    description: 'Password for the GitHub account'
+    required: false
+    default: '{{ secrets.GITHUB_PASSWORD }}'
+  GITHUB_LOGIN:
+    description: 'Password for the GitHub account'
+    required: false
+    default: 'true'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
+    - ${{ inputs.ACTIONS_ACCESS_KEY }}
+    - ${{ inputs.GITHUB_LOGIN }}
