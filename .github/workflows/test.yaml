@@ -12,7 +12,7 @@ jobs:
       - name: test
         id: hello_world_step
         run: |
-          cd $GITHUB_WORKSPACE/new_action && test.sh obj.json
+          cd $GITHUB_WORKSPACE/new_action && ./test.sh obj.json
 #############################################################################################
       - name: Hello world action step
         id: hello
