@@ -2,15 +2,16 @@ from asyncio import subprocess
 import os
 import subprocess
 from datetime import datetime
+import sys
 
 def main():
     '''
     '''
     obj = {
-        "key_1": os.environ.get("key_1", "None"),
-        "key_2": os.environ.get("key_2", "None"),
-        "key_3": os.environ.get("key_3", "None"),
-        "key_4": os.environ.get("key_4", "None")
+        "key_1": sys.argv[1],
+        "key_2": sys.argv[2],
+        "key_3": sys.argv[3],
+        "key_4": sys.argv[4]
     }
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
