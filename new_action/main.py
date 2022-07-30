@@ -39,6 +39,7 @@ def open_git_pr(github_repository):
             'base': 'master'
         }
     )
+    print(res.text)
     if res is not None:
         return res.json()
     else:
