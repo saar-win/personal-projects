@@ -11,15 +11,15 @@ COPY main.py /app/main.py
 # compy the req file
 COPY requirements.txt requirements.txt
 
+# install req
+RUN pip install -r ./requirements.txt
+
 # add user step
 RUN adduser --disabled-password --gecos '' rapidapi
 RUN echo 'rapidapi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # define the user
 USER rapidapi
-
-# install req
-RUN pip install -r ./requirements.txt
 
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]
