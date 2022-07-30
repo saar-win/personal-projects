@@ -4,6 +4,8 @@ import yaml
 import requests
 import subprocess
 import uuid
+from requests.auth import HTTPBasicAuth
+
 
 def main():
     '''
@@ -37,16 +39,15 @@ def open_git_pr(branch_name):
     service_name = "test"
     token = {os.getenv('INPUT_ACTIONS_ACCESS_USERNAME') + ":" + os.getenv('INPUT_ACTIONS_ACCESS_KEY')}
     headers = {
-        "Accept": "application/vnd.github.v3+json",
-        "Authorization": f"token {os.getenv('INPUT_ACTIONS_ACCESS_KEY')}"
-    }
+        "Accept": "application/vnd.github.v3+json"
+        }
     json={
         'title': 'New Action',
         'body': f'New service {service_name}',
         'head': f'{branch_name}',
         'base': 'master'
     }
-    res = requests.post('https://api.github.com/repos/saar-win/personal-projects/pulls', json=json, headers=headers)
+    res = requests.post('https://api.github.com/repos/saar-win/personal-projects/pulls', json=json, headers=headers, auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY')))
     print(res.text)
 
     if res.ok:
