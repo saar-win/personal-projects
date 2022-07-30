@@ -12,6 +12,8 @@ jobs:
       - name: Hello world action step
         id: hello
         uses: saar-win/personal-projects/new_action@v2
+        with:
+          key_1: new_action/obj.json
 #############################################################################################
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
