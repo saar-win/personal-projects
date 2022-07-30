@@ -7,7 +7,6 @@ import sys
 def main():
     '''
     '''
-    print(os.environ)
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     subprocess.run(f'echo "::set-output name=time::{current_time}"', shell=True)
