@@ -24,8 +24,3 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.key_1 }}
-    - ${{ inputs.key_2 }}
-    - ${{ inputs.key_3 }}
-    - ${{ inputs.key_4 }}

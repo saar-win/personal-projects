@@ -8,10 +8,7 @@ def main():
     '''
     '''
     obj = {
-        "key_1": sys.argv[1],
-        "key_2": sys.argv[2],
-        "key_3": sys.argv[3],
-        "key_4": sys.argv[4]
+        "key_1": sys.argv[1]
     }
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")

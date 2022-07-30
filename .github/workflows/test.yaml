@@ -5,13 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: test
+        id: hello_world_step
+        run: |
+          cd $GITHUB_WORKSPACE/new_action && echo "::set-output name=object::$(cat obj.json)"
       - name: Hello world action step
         id: hello
         uses: saar-win/personal-projects/new_action@v2
         with:
-          key_1: 'test_1'
-          key_2: 'test_2'
-          key_3: 'test_3'
-          key_4: 'test_4'
+          object: ${{ steps.hello_world_step.outputs.object }}
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
