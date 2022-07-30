@@ -21,7 +21,7 @@ def git_actions():
     '''
     '''
     subprocess.run("git checkout -b test", shell=True)
-    subprocess.run("touch file.text", shell=True)
+    subprocess.run("touch file.txt", shell=True)
     subprocess.run("git add -A", shell=True)
     subprocess.run("git commit -am test", shell=True)
     subprocess.run("git push --set-upstream origin test", shell=True)
