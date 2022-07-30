@@ -5,17 +5,8 @@ inputs:
   FILE:
     description: 'A path to yaml file that contain the service information'
     required: true
-  GITHUB_USERNAME:
-    description: 'User name for the github account'
-    required: false
-    default: '{{ secrets.GITHUB_USERNAME }}'
-  GITHUB_PASSWORD:
-    description: 'Password for the GitHub account'
-    required: false
-    default: '{{ secrets.GITHUB_PASSWORD }}'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.FILE }}
-  pre-entrypoint: 'setup.sh'

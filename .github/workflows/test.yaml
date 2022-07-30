@@ -10,7 +10,14 @@ jobs:
         uses: actions/checkout@v2
 #############################################################################################
       - name: Hello world action step
-        id: hello
+        id: settings
+        uses: saar-win/personal-projects/new_action@v2
+        with:
+          ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
+          ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
+#############################################################################################
+      - name: Hello world action step
+        id: print
         uses: saar-win/personal-projects/new_action@v2
         with:
           file: new_action/test.yml
