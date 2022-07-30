@@ -11,10 +11,13 @@ jobs:
         id: hello_world_step
         run: |
           cd $GITHUB_WORKSPACE/new_action && echo "::set-output name=object::$(cat obj.json)"
+      - name: just print
+        run: |
+          echo "${{ steps.hello_world_step.outputs.object }}"
       - name: Hello world action step
         id: hello
         uses: saar-win/personal-projects/new_action@v2
         with:
-          object: ${{ steps.hello_world_step.outputs.object }}
+          key_1: ${{ steps.hello_world_step.outputs.object }}
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
