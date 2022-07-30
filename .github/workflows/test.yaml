@@ -12,11 +12,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 #############################################################################################
-      - name: Set permissions to git
-        id: settings
-        uses: saar-win/personal-projects/settings@v2
-        with:
-          GITHUB_LOGIN: 'true'
+      # - name: Set permissions to git
+      #   id: settings
+      #   uses: saar-win/personal-projects/settings@v2
+      #   with:
+      #     GITHUB_LOGIN: 'true'
 #############################################################################################
       - name: Print the object
         id: print
