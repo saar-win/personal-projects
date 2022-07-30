@@ -1,5 +1,5 @@
 # base img
-FROM alpine:3.7
+FROM bash:4.4
 
 # defines workdir
 WORKDIR /app
