@@ -1,7 +1,7 @@
 on:
-  - push
-  branches:
-    - v2
+  push:
+    branches:
+      - v2
 
 jobs:
   hello_world_job:
