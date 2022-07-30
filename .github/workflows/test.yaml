@@ -14,10 +14,11 @@ jobs:
 #############################################################################################
       - name: Hello world action step
         id: settings
-        uses: saar-win/personal-projects/new_action@settings
+        uses: saar-win/personal-projects/settings@settings
         with:
           ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
+          GITHUB_LOGIN: 'true'
 #############################################################################################
       - name: Hello world action step
         id: print
