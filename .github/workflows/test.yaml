@@ -14,6 +14,3 @@ jobs:
         uses: saar-win/personal-projects/new_action@v2
         with:
           file: new_action/obj.json
-#############################################################################################
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"

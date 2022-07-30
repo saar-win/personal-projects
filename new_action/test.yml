@@ -1,0 +1,13 @@
+vm_settings:
+    project_id: snappy-sight-332507
+    zone: europe-west3-a
+    instance_name: saar-vm
+    machine: e2-standard-4
+    image:
+        - ubuntu-os-cloud
+        - ubuntu-1804-lts
+    disk_size: 150
+    persistent_disk_name: postgress
+    persistent_size: 10
+    allow_to_connect: "46.117.240.41"
+    deny_to_connect: "0.0.0.0/0"
