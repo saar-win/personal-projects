@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: saar-win/personal-projects/new_action@v1
+        uses: saar-win/personal-projects/new_action@v2
         with:
           key_1: 'test'
       - name: Get the output time
