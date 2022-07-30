@@ -25,6 +25,8 @@ jobs:
         uses: saar-win/personal-projects/new_action@v2
         with:
           key_1: ${{ steps.hello_world_step.outputs.object_to_test }}
+        env:
+          TEST: '${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}'
 #############################################################################################
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
