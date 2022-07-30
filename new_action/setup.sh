@@ -1,1 +1,0 @@
-git config --global url."https://${{ secrets.ACTIONS_ACCESS_USERNAME }}:${{ secrets.ACTIONS_ACCESS_KEY }}@github.com/".insteadOf "https://github.com/"

@@ -20,7 +20,7 @@ jobs:
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
           GITHUB_LOGIN: 'true'
 #############################################################################################
-      - name: Hello world action step
+      - name: Print the object
         id: print
         uses: saar-win/personal-projects/new_action@v2
         with:
