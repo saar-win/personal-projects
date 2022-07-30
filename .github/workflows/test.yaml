@@ -23,4 +23,4 @@ jobs:
         id: print
         uses: saar-win/personal-projects/new_action@v2
         with:
-          file: new_action/test.yml
+          FILE: new_action/test.yml
