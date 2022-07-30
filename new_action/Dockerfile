@@ -15,9 +15,10 @@ COPY requirements.txt requirements.txt
 RUN pip install -r ./requirements.txt
 
 # add user step
-RUN adduser --disabled-password --gecos '' RapidAPI
-RUN echo 'RapidAPI ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN adduser --disabled-password --gecos '' rapidapi
+RUN echo 'rapidapi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
+# define the user
 USER RapidAPI
 
 # run the main file
