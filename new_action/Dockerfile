@@ -2,6 +2,6 @@ FROM python:3.10
 
 WORKDIR /app
 
-COPY main.py main.py
+COPY main.py /app/main.py
 
-CMD ["/app/main.py"]
+ENTRYPOINT ["python3", "/app/main.py"]

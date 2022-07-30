@@ -16,7 +16,6 @@ def main():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     subprocess.run(f'echo "::set-output name=time::{current_time}"', shell=True)
-    print(obj)
     return obj
 
 if __name__ == '__main__':
