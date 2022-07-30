@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: saar-win/personal-projects@v1
+        uses: saar-win/personal-projects/action@v1
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
