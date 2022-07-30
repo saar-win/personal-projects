@@ -1,5 +1,5 @@
 # base img
-FROM bash:4.4
+FROM node:14.19.3
 
 # defines workdir
 WORKDIR /app
