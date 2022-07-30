@@ -17,9 +17,10 @@ jobs:
       - name: print
         run: |
           echo ${{ steps.hello_world_step.outputs.test }}
+#############################################################################################
       - name: print_2
         run: |
-          echo $obj
+          echo $GITHUB_ENV
 #############################################################################################
 #       - name: Hello world action step
 #         id: hello
