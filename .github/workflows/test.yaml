@@ -16,8 +16,6 @@ jobs:
         id: settings
         uses: saar-win/personal-projects/settings@v2
         with:
-          ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
-          ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
           GITHUB_LOGIN: 'true'
 #############################################################################################
       - name: Print the object
@@ -25,3 +23,6 @@ jobs:
         uses: saar-win/personal-projects/new_action@v2
         with:
           FILE: new_action/test.yml
+#############################################################################################
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
