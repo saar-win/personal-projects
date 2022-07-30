@@ -12,17 +12,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 #############################################################################################
-      # - name: Set permissions to git
-      #   id: settings
-      #   uses: saar-win/personal-projects/settings@v2
-      #   with:
-      #     GITHUB_LOGIN: 'true'
-#############################################################################################
       - name: Print the object
         id: print
         uses: saar-win/personal-projects/new_action@v2
         with:
           FILE: new_action/test.yml
-#############################################################################################
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
