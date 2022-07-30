@@ -8,6 +8,7 @@ def main():
     '''
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
     print(yaml_file)
+    git_actions()
     open_git_pr(github_repository="saar-win/personal-projects")
 
 def load_yaml(file_path):
