@@ -5,8 +5,18 @@ inputs:
   FILE:
     description: 'A path to yaml file that contain the service information'
     required: true
+  ACTIONS_ACCESS_USERNAME:
+    description: 'User name for the github account'
+    required: false
+    default: '{{ secrets.GITHUB_USERNAME }}'
+  ACTIONS_ACCESS_KEY:
+    description: 'Password for the GitHub account'
+    required: false
+    default: '{{ secrets.GITHUB_PASSWORD }}'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.FILE }}
+    - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
+    - ${{ inputs.ACTIONS_ACCESS_KEY }}

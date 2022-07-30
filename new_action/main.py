@@ -35,8 +35,10 @@ def open_git_pr(branch_name):
     '''
     '''
     service_name = "test"
+    token = {os.environ('ACTIONS_ACCESS_USERNAME') + ":" + os.environ('ACTIONS_ACCESS_KEY')}
     headers = {
-        "Accept": "application/vnd.github.v3+json"
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"token {token}"
     }
     res = requests.post('https://api.github.com/repos/saar-win/personal-projects/pulls',
         json={
