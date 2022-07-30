@@ -1,0 +1,14 @@
+name: Run-tests
+on:
+  repository_dispatch:
+    types: 
+      - build
+
+jobs:
+  build:
+    name: This is from curl requests
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "I just ran all your tests!"
+          echo "payload: ${{ github.event.client_payload.key1 }}"

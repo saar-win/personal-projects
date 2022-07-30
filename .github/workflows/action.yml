@@ -1,0 +1,31 @@
+# action.yml
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  key_1:
+    description: 'Key 1'
+    required: false
+    default: '1'
+  key_2:
+    description: 'Key 2'
+    required: false
+    default: '2'
+  key_3:
+    description: 'Key 3'
+    required: false
+    default: '3'
+  key_4:
+    description: 'Key 4'
+    required: false
+    default: '4'
+outputs:
+  time:
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'action/Dockerfile'
+  args:
+    - ${{ inputs.key_1 }}
+    - ${{ inputs.key_2 }}
+    - ${{ inputs.key_3 }}
+    - ${{ inputs.key_4 }}
