@@ -35,7 +35,7 @@ def open_git_pr(branch_name):
     '''
     '''
     service_name = "test"
-    token = {os.environ('INPUT_ACTIONS_ACCESS_USERNAME') + ":" + os.environ('INPUT_ACTIONS_ACCESS_KEY')}
+    token = {os.getenv('INPUT_ACTIONS_ACCESS_USERNAME') + ":" + os.getenv('INPUT_ACTIONS_ACCESS_KEY')}
     headers = {
         "Accept": "application/vnd.github.v3+json",
         "Authorization": f"token {token}"
