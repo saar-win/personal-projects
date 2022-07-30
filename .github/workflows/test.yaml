@@ -7,9 +7,9 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: saar-win/personal-projects/action@v1
+        uses: saar-win/personal-projects/new_action@v1
         with:
-          who-to-greet: 'Mona the Octocat'
+          key_1: 'test'
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
