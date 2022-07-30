@@ -16,9 +16,9 @@ jobs:
 #############################################################################################
       - name: just print
         run: |
-          echo "${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}"
+          echo "${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}"
         env:
-          TEST: '${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}'
+          TEST: '${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}'
 #############################################################################################
       - name: Hello world action step
         id: hello
@@ -26,7 +26,7 @@ jobs:
         with:
           key_1: ${{ steps.hello_world_step.outputs.object_to_test }}
         env:
-          TEST: '${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}'
+          TEST: ${{ steps.hello_world_step.outputs.object_to_test }}
 #############################################################################################
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
