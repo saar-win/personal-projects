@@ -23,7 +23,7 @@ outputs:
     description: 'The time we greeted you'
 runs:
   using: 'docker'
-  image: 'action/Dockerfile'
+  image: 'Dockerfile'
   args:
     - ${{ inputs.key_1 }}
     - ${{ inputs.key_2 }}
