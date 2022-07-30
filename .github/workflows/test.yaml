@@ -16,9 +16,9 @@ jobs:
 #############################################################################################
       - name: just print
         run: |
-          echo "${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}"
+          echo "${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}"
         env:
-          OBJECT_TO_TEST: ${{ toJSON(steps.hello_world_step.outputs.object_to_test) }}
+          TEST: '${{ fromJson(steps.hello_world_step.outputs.object_to_test) }}'
 #############################################################################################
       - name: Hello world action step
         id: hello
