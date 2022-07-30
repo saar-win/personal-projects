@@ -1,5 +1,19 @@
 # base img
-FROM node:14.19.3
+FROM alpine:latest
+
+LABEL "com.github.actions.name"="git-settings"
+LABEL "com.github.actions.description"="A settings before run actions"
+LABEL "com.github.actions.icon"="hash"
+LABEL "com.github.actions.color"="black"
+
+RUN set -e -x; \
+        apk add --no-cache \
+            bash \
+            curl \
+            jq \
+            git \
+            coreutils \
+            openssh-client
 
 # defines workdir
 WORKDIR /app
