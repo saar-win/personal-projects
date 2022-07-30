@@ -9,26 +9,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 #############################################################################################
-      - name: test
-        id: hello_world_step
-        run: |
-          cd $GITHUB_WORKSPACE/new_action && ./test.sh obj.json
+      - name: Hello world action step
+        id: hello
+        uses: saar-win/personal-projects/new_action@v2
 #############################################################################################
-      - name: print
-        run: |
-          echo ${{ steps.hello_world_step.outputs.test }}
-#############################################################################################
-      - name: print_2
-        run: |
-          echo $GITHUB_ENV
-#############################################################################################
-#       - name: Hello world action step
-#         id: hello
-#         uses: saar-win/personal-projects/new_action@v2
-#         with:
-#           key_1: ${{ steps.hello_world_step.outputs.test }}
-#         env:
-#           TEST: ${{ steps.hello_world_step.outputs.test }}
-# #############################################################################################
-#       - name: Get the output time
-#         run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
