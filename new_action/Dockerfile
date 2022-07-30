@@ -1,7 +1,6 @@
 # base img
 FROM python:3.10
 
-
 # defines workdir
 WORKDIR /app
 

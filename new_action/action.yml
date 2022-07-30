@@ -2,11 +2,19 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  file:
+  FILE:
     description: 'A path to yaml file that contain the service information'
     required: true
+  GITHUB_USERNAME:
+    description: 'User name for the github account'
+    required: false
+    default: '{{ secrets.GITHUB_USERNAME }}'
+  GITHUB_PASSWORD:
+    description: 'Password for the GitHub account'
+    required: false
+    default: '{{ secrets.GITHUB_PASSWORD }}'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.file }}
+    - ${{ inputs.FILE }}
