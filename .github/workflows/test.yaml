@@ -12,7 +12,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 #############################################################################################
-      - name: Hello world action step
+      - name: Set permissions to git
         id: settings
         uses: saar-win/personal-projects/settings@v2
         with:
