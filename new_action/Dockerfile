@@ -19,7 +19,7 @@ RUN adduser --disabled-password --gecos '' rapidapi
 RUN echo 'rapidapi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # define the user
-USER RapidAPI
+USER rapidapi
 
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]
