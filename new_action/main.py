@@ -7,7 +7,7 @@ import sys
 def main():
     '''
     '''
-    os.environ
+    print(os.environ)
     obj = {
         "key_1": sys.argv[1]
     }
