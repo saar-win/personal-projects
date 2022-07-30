@@ -6,7 +6,7 @@ on:
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A POC wf
+    name: A POC WF
     steps:
 #############################################################################################
       - name: Check out code
