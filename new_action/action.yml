@@ -18,3 +18,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.FILE }}
+  pre-entrypoint: 'setup.sh'
