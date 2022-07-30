@@ -1,6 +1,7 @@
 # base img
 FROM python:3.10
 
+
 # defines workdir
 WORKDIR /app
 
@@ -12,6 +13,12 @@ COPY requirements.txt requirements.txt
 
 # install req
 RUN pip install -r ./requirements.txt
+
+# add user step
+RUN adduser --disabled-password --gecos '' RapidAPI
+RUN echo 'RapidAPI ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER RapidAPI
 
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]
