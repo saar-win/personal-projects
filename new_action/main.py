@@ -161,10 +161,6 @@ def git_actions(branch_name):
     '''
     '''
     commit_msg = "test"
-    x = subprocess.run('sudo chown -R runner .', shell=True, capture_output=True, text=True).stdout
-    print(x)
-    subprocess.run(f'git config --global user.email "saar1122@gmail.com"', shell=True, capture_output=True, text=True).stdout
-    subprocess.run(f'git config --global user.name "saar-win"', shell=True, capture_output=True, text=True).stdout
     subprocess.run(f'git checkout -b {branch_name}', shell=True)
     subprocess.run('git add -A', shell=True)
     subprocess.run(f'git commit -am {commit_msg}', shell=True)
