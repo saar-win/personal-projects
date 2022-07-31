@@ -2,30 +2,31 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  key_1:
-    description: 'Key 1'
+  FILE:
+    description: 'A path to yaml file that contain the service information'
+    required: true
+  ACTIONS_ACCESS_USERNAME:
+    description: 'User name for the github account'
     required: false
-    default: '1'
-  key_2:
-    description: 'Key 2'
+    # default: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
+  ACTIONS_ACCESS_KEY:
+    description: 'Password for the GitHub account'
     required: false
-    default: '2'
-  key_3:
-    description: 'Key 3'
+    # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
+  COMPUTE_POWER_FILE:
+    description: 'A path to the compute power file'
     required: false
-    default: '3'
-  key_4:
-    description: 'Key 4'
+    # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
+  FLAG_FILES:
+    description: 'A path to the compute power file'
     required: false
-    default: '4'
-outputs:
-  time:
-    description: 'The time we greeted you'
+    default: new_action/flag.json
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.key_1 }}
-    - ${{ inputs.key_2 }}
-    - ${{ inputs.key_3 }}
-    - ${{ inputs.key_4 }}
+    - ${{ inputs.FILE }}
+    - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
+    - ${{ inputs.ACTIONS_ACCESS_KEY }}
+    - ${{ inputs.COMPUTE_POWER_FILE }}
+    - ${{ inputs.FLAG_FILES }}
