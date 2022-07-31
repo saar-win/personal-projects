@@ -21,7 +21,7 @@ def main():
     git_actions(branch_name)
 
     # open PR
-    # open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
 def load_flag_features(flag_file):
     '''
@@ -163,7 +163,7 @@ def git_actions(branch_name):
     commit_msg = "test"
     subprocess.run(f'git config --global user.email "saar1122@gmail.com"', shell=True)
     subprocess.run(f'git config --global user.name "saar-win"', shell=True)
-    subprocess.run(f'sudo chown -R runner .', shell=True)
+    subprocess.run(f'chown -R runner .', shell=True)
     subprocess.run(f'git checkout -b {branch_name}', shell=True)
     subprocess.run(f'git commit -am {commit_msg}', shell=True)
     subprocess.run(f'git push --set-upstream origin {branch_name}', shell=True)
