@@ -18,8 +18,10 @@ COPY requirements.txt requirements.txt
 # install req
 RUN pip install -r ./requirements.txt
 
-RUN chmod +x  /app/setup_git.sh
+ENV USER_NAME USER_NAME
+ENV PASSWORD PASSWORD
 
-RUN cd /app/ && ./setup_git.sh
+RUN git config --global --add url."https://$USER_NAME:$PASSWORD@github.com/".insteadOf "https://github.com/"
+
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]

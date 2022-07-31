@@ -24,6 +24,9 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env:
+    USER_NAME: ${{ inputs.ACTIONS_ACCESS_USERNAME }}
+    PASSWORD: ${{ inputs.ACTIONS_ACCESS_KEY }}
   args:
     - ${{ inputs.FILE }}
     - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
