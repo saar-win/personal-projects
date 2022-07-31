@@ -9,10 +9,10 @@ service:
   resources:
     requests:
       cpu: "2Mi"
-      memory: "1Gi"
+      memory: "3Gi"
     limits:
-      memory: "128Mi"
-      cpu: "100m"
+      memory: "508Mi"
+      cpu: "90m"
   volume:
     name: test-volume
     emptyDir: {}
