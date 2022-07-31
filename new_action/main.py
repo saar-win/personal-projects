@@ -13,14 +13,15 @@ def main():
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
     # create random branch name
-    # branch_name = f"test_{uuid.uuid4().hex[:6]}"
+    branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
     template = create_template(yaml_file, "compute-power-file.yml")
+
     # open branch add files
-    # git_actions(branch_name)
+    git_actions(branch_name)
 
     # open PR
-    # open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
 def load_flag_features():
     '''
