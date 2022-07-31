@@ -16,11 +16,11 @@ inputs:
   COMPUTE_POWER_FILE:
     description: 'A path to the compute power file'
     required: false
-    # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
+    default: new_action/compute-power-file.yml
   FLAG_FILE:
     description: 'A path to the compute power file'
     required: false
-    default: new_action/flag.json
+    default: 'https://raw.githubusercontent.com/saar-win/personal-projects/v2/new_action/flag.json'
 runs:
   using: 'docker'
   image: 'Dockerfile'

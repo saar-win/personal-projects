@@ -23,12 +23,11 @@ def main():
     # open PR
     open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.getenv("GITHUB_REPOSITORY"))
 
-def load_flag_features(flag_file):
+def load_flag_features(flag_file_url):
     '''
     '''
-    with open(flag_file, 'r') as f:
-        obj = json.load(f)
-    return obj
+    flag_file = requests.get(flag_file_url).json()
+    return flag_file
 
 
 def load_yaml(file_path):
