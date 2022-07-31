@@ -24,7 +24,7 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  pre-entrypoint: 'setup_git.sh'
+  pre-entrypoint: 'new_action/setup_git.sh'
   args:
     - ${{ inputs.FILE }}
     - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
