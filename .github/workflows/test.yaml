@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - v2
+      - main
 
 jobs:
   hello_world_job:
