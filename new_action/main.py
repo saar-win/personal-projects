@@ -125,35 +125,35 @@ def create_template(_object, path_compute_power_file, flag_file):
             f.close()
 ##################################################################################################################################
 
-    if _object['templates']['deployment'] and feature_flag['deployment']:
-        env_vars = template['spec']['template']['spec']['containers'][0]['env']
-        # print(env_vars)
-        # print(_object['envs'])
+#     if _object['templates']['deployment'] and feature_flag['deployment']:
+#         env_vars = template['spec']['template']['spec']['containers'][0]['env']
+#         # print(env_vars)
+#         # print(_object['envs'])
 
-########################################################################################
+# ########################################################################################
 
-    if _object['templates']['secrets'] and feature_flag['secrets']:
-        with open('templates/secret.yaml', 'r') as f:
-            template = yaml.safe_load(f)
-        secret_vars = template['data']
-        print(secret_vars)
+#     if _object['templates']['secrets'] and feature_flag['secrets']:
+#         with open('templates/secret.yaml', 'r') as f:
+#             template = yaml.safe_load(f)
+#         secret_vars = template['data']
+#         print(secret_vars)
 
-########################################################################################
+# ########################################################################################
 
-    if _object['templates']['service'] and feature_flag['service']:
-        with open('templates/service.yaml', 'r') as f:
-            template = yaml.safe_load(f)
-        service = template['data']
-        print(service)
+#     if _object['templates']['service'] and feature_flag['service']:
+#         with open('templates/service.yaml', 'r') as f:
+#             template = yaml.safe_load(f)
+#         service = template['data']
+#         print(service)
 
-########################################################################################
+# ########################################################################################
 
-    if _object['templates']['configmap'] and feature_flag['configmap']:
-        with open('templates/configmap.yaml', 'r') as f:
-            template = yaml.safe_load(f)
-        configmap = template['data']
-        print(configmap)
-    return ""
+#     if _object['templates']['configmap'] and feature_flag['configmap']:
+#         with open('templates/configmap.yaml', 'r') as f:
+#             template = yaml.safe_load(f)
+#         configmap = template['data']
+#         print(configmap)
+#     return ""
 
 ########################################################################################
 
