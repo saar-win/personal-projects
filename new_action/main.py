@@ -18,10 +18,10 @@ def main():
     template = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
     # open branch add files
-    git_actions(branch_name)
+    # git_actions(branch_name)
 
     # open PR
-    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    # open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
 def load_flag_features(flag_file):
     '''
@@ -161,8 +161,12 @@ def git_actions(branch_name):
     '''
     '''
     commit_msg = "test"
+    subprocess.run(f"git config --global user.email 'saar1122@gmail.com'", shell=True, capture_output=True, text=True).stdout
+    subprocess.run(f"git config --global user.name 'saar-win'", shell=True, capture_output=True, text=True).stdout
+    permissions = 'sudo chown -R "${USER:-$(id -un)}" .'
+    x = subprocess.run(permissions, shell=True, capture_output=True, text=True).stdout
+    print(x)
     subprocess.run(f"git checkout -b {branch_name}", shell=True)
-    # subprocess.run("touch file.txt", shell=True)
     subprocess.run("git add -A", shell=True)
     subprocess.run(f"git commit -am {commit_msg}", shell=True)
     subprocess.run(f"git push --set-upstream origin {branch_name}", shell=True)
