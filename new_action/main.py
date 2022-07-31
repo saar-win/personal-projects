@@ -10,15 +10,16 @@ from requests.auth import HTTPBasicAuth
 def main():
     '''
     '''
-    yaml_file = load_yaml(os.getenv('INPUT_FILE'))
+    # yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
-    print(yaml_file)
+    # print(yaml_file)
 
-    branch_name = f"test_{uuid.uuid4().hex[:6]}"
+    # branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
-    git_actions(branch_name)
+    # git_actions(branch_name)
 
-    open_git_pr(branch_name, service_name = "test", repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    # open_git_pr(branch_name="test_123", service_name = "test", repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    open_git_pr(branch_name="test_123", service_name = "test", repo_name = "saar-win/personal-projects")
 
 def load_yaml(file_path):
     '''
@@ -49,7 +50,11 @@ def open_git_pr(branch_name, service_name, repo_name):
         'head': f'{branch_name}',
         'base': 'main'
     }
-    res = requests.post('https://api.github.com/repos/{}/pulls'.format(repo_name), json=json, headers=headers, auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY')))
+    res = requests.post('https://api.github.com/repos/{}/pulls'.format(repo_name),
+        json = json,
+        headers = headers,
+        auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY'))
+        )
     print(res.text)
 
     if res.ok:
