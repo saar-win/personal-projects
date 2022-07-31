@@ -36,7 +36,7 @@ def load_yaml(file_path):
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file['service']
 
-def create_template(_object, path_compute_power_file, flag_file):
+def create_template(_object, compute_power_file_url, flag_file):
     '''
     '''
     feature_flag = load_flag_features(flag_file)
@@ -45,7 +45,8 @@ def create_template(_object, path_compute_power_file, flag_file):
     #     template = yaml.safe_load(f)
 
     # read the existing compute power files
-    compute_power_file = yaml.safe_load(open(path_compute_power_file))
+    compute_power_file = requests.get(compute_power_file_url).json()
+
 ##################################################################################################################################
     if _object['templates']['deployment'] and feature_flag['deployment']:
 

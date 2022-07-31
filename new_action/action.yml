@@ -16,7 +16,7 @@ inputs:
   COMPUTE_POWER_FILE:
     description: 'A path to the compute power file'
     required: false
-    default: new_action/compute-power-file.yml
+    default: 'https://raw.githubusercontent.com/saar-win/personal-projects/v2/new_action/compute-power-file.yml'
   FLAG_FILE:
     description: 'A path to the compute power file'
     required: false
