@@ -15,7 +15,7 @@ def main():
     # create random branch name
     branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
-    template = create_template(yaml_file, "compute-power-file.yml")
+    template = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"))
 
     # open branch add files
     git_actions(branch_name)
