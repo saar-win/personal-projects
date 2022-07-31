@@ -14,19 +14,15 @@ jobs:
 #############################################################################################
       - name: Check out code
         uses: actions/checkout@v2
-#############################################################################################
-      - name: "test"
-        run: |
-          cd $GITHUB_WORKSPACE/rapidapi && ./test.sh
-#############################################################################################
-      # - name: Print the object
-      #   id: print
-      #   uses: saar-win/personal-projects/new_action@v2
-      #   with:
-      #     FILE: rapidapi/test.yml
-      #     ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
-      #     ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
-      #     COMPUTE_POWER_FILE: new_action/compute-power-file.yml
-      #     FLAG_FILE: new_action/flag.json
+############################################################################################
+      - name: Print the object
+        id: print
+        uses: saar-win/personal-projects/new_action@v2
+        with:
+          FILE: rapidapi/test.yml
+          ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
+          ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
+          COMPUTE_POWER_FILE: new_action/compute-power-file.yml
+          FLAG_FILE: new_action/flag.json
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
