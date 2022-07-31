@@ -8,7 +8,7 @@ WORKDIR /app
 COPY main.py /app/main.py
 
 # copy templates file
-COPY templates /app/templates
+COPY templates/* /app/templates/*
 
 # compy the req file
 COPY requirements.txt requirements.txt
