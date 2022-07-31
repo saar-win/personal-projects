@@ -7,6 +7,8 @@ WORKDIR /app
 # copy the main file
 COPY main.py /app/main.py
 
+COPY setup_git.sh /app/setup_git.sh
+
 # copy templates file
 COPY templates/ ./templates/
 
@@ -16,12 +18,6 @@ COPY requirements.txt requirements.txt
 # install req
 RUN pip install -r ./requirements.txt
 
-# # add user step
-# RUN adduser --disabled-password --gecos '' rapidapi
-# RUN echo 'rapidapi ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# # define the user
-# USER rapidapi
-
+RUN ./app/setup_git.sh
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]
