@@ -16,6 +16,9 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env:
+    ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
+    ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
   args:
     - ${{ inputs.FILE }}
     - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
