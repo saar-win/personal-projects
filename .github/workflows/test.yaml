@@ -24,6 +24,6 @@ jobs:
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
           COMPUTE_POWER_FILE: new_action/compute-power-file.yml
           FLAG_FILE: new_action/flag.json
-#
+
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
