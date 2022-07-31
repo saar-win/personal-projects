@@ -166,7 +166,6 @@ def git_actions(branch_name):
     permissions = 'sudo chown -R "${USER:-$(id -un)}"'
     subprocess.run(permissions, shell=True)
     subprocess.run(f"git checkout -b {branch_name}", shell=True)
-    # subprocess.run("touch file.txt", shell=True)
     subprocess.run("git add -A", shell=True)
     subprocess.run(f"git commit -am {commit_msg}", shell=True)
     subprocess.run(f"git push --set-upstream origin {branch_name}", shell=True)
