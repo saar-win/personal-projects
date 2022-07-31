@@ -13,6 +13,10 @@ inputs:
     description: 'Password for the GitHub account'
     required: false
     # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
+  COMPUTE_POWER_FILE:
+    description: 'A path to the compute power file'
+    required: false
+    # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -20,3 +24,4 @@ runs:
     - ${{ inputs.FILE }}
     - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
     - ${{ inputs.ACTIONS_ACCESS_KEY }}
+    - ${{ inputs.COMPUTE_POWER_FILE }}
