@@ -17,7 +17,7 @@ inputs:
     description: 'A path to the compute power file'
     required: false
     # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
-  FLAGS_FILES:
+  FLAG_FILES:
     description: 'A path to the compute power file'
     required: false
     default: new_action/flag.json
@@ -29,4 +29,4 @@ runs:
     - ${{ inputs.ACTIONS_ACCESS_USERNAME }}
     - ${{ inputs.ACTIONS_ACCESS_KEY }}
     - ${{ inputs.COMPUTE_POWER_FILE }}
-    - ${{ inputs.FLAGS_FILES }}
+    - ${{ inputs.FLAG_FILES }}
