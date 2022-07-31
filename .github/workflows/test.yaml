@@ -1,4 +1,10 @@
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   hello_world_job:
@@ -13,8 +19,9 @@ jobs:
         id: print
         uses: saar-win/personal-projects/new_action@v2
         with:
-          FILE: new_action/test.yml
+          FILE: rapidapi/test.yml
           ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
           COMPUTE_POWER_FILE: new_action/compute-power-file.yml
           FLAG_FILE: new_action/flag.json
+#
