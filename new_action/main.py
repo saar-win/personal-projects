@@ -188,8 +188,9 @@ def open_git_pr(branch_name, service_name, repo_name):
         )
 
     if res.ok:
-        return res.json()
+        return True
     else:
+        print(res.json())
         raise Exception(f"Error creating PR to {repo_name}")
 
 if __name__ == '__main__':
