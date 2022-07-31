@@ -164,6 +164,7 @@ def git_actions(branch_name):
     subprocess.run(f'git config --global user.email "saar1122@gmail.com"', shell=True)
     subprocess.run(f'git config --global user.name "saar-win"', shell=True)
     subprocess.run(f'chown -R runner .', shell=True)
+    subprocess.run(f'cd /tmp', shell=True)
     subprocess.run(f'git clone https://github.com/saar-win/personal-projects.git personal-projects', shell=True)
     subprocess.run(f'cd personal-projects', shell=True)
     subprocess.run(f'git checkout -b {branch_name}', shell=True)
