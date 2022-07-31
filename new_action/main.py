@@ -23,30 +23,29 @@ def main():
     # open PR
     open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.getenv("GITHUB_REPOSITORY"))
 
-def load_flag_features(flag_file_url):
-    '''
-    '''
-    flag_file = requests.get(flag_file_url).json()
-    return flag_file
-
-
 def load_yaml(file_path):
     '''
     '''
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file['service']
 
-def create_template(_object, compute_power_file_url, flag_file):
+def load_flag_features(flag_file_url):
     '''
     '''
-    feature_flag = load_flag_features(flag_file)
+    flag_file = requests.get(flag_file_url).json()
+    return flag_file
+
+def create_template(_object, compute_power_file_url, flag_file_url):
+    '''
+    '''
+    feature_flag = load_flag_features(flag_file_url)
 
     # with open('templates/Deployment.yaml', 'r') as f:
     #     template = yaml.safe_load(f)
 
     # read the existing compute power files
-    compute_power_file = requests.get(compute_power_file_url).json()
-
+    compute_file = requests.get(compute_power_file_url).text
+    compute_power_file = yaml.safe_load(compute_file)
 ##################################################################################################################################
     if _object['templates']['deployment'] and feature_flag['deployment']:
 
