@@ -1,0 +1,32 @@
+service:
+  templates:
+    deployment: true
+    migration: false
+    service: false
+    secrets: false
+    configmap: false
+  name: test
+  resources:
+    requests:
+      cpu: "1Mi"
+      memory: "3Gi"
+    limits:
+      memory: "508Mi"
+      cpu: "90m"
+  volume:
+    name: test-volume
+    emptyDir: {}
+  envs:
+    - SAAR_TEST
+    - SAAR_TEST_1
+    - SAAR_TEST_2
+    - SAAR_TEST_3
+    - SAAR_TEST_4
+    - SAAR_TEST_5
+  secrets:
+    - ACTIONS_ACCESS_USERNAME
+    - ACTIONS_ACCESS_KEY
+    - ACTIONS_ACCESS_KEY_2
+    - ACTIONS_ACCESS_KEY_3
+    - ACTIONS_ACCESS_KEY_4
+#
