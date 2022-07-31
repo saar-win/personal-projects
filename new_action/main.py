@@ -10,14 +10,17 @@ from requests.auth import HTTPBasicAuth
 def main():
     '''
     '''
+    # Load yaml file
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
+    # create random branch name
     branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
+    # open branch add files
     git_actions(branch_name)
 
+    # open PR
     open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
-    # open_git_pr(branch_name="test_1d0895", service_name = "test", repo_name = "saar-win/personal-projects")
 
 def load_yaml(file_path):
     '''
@@ -53,7 +56,6 @@ def open_git_pr(branch_name, service_name, repo_name):
         headers = headers,
         auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY'))
         )
-    print(res.text)
 
     if res.ok:
         return res.json()
