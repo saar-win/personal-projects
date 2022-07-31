@@ -10,22 +10,20 @@ from requests.auth import HTTPBasicAuth
 def main():
     '''
     '''
-    # yaml_file = load_yaml(os.getenv('INPUT_FILE'))
+    yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
-    # print(yaml_file)
+    branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
-    # branch_name = f"test_{uuid.uuid4().hex[:6]}"
+    git_actions(branch_name)
 
-    # git_actions(branch_name)
-
-    # open_git_pr(branch_name="test_123", service_name = "test", repo_name = os.environ.get("GITHUB_REPOSITORY"))
-    open_git_pr(branch_name="test_123", service_name = "test", repo_name = "saar-win/personal-projects")
+    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    # open_git_pr(branch_name="test_1d0895", service_name = "test", repo_name = "saar-win/personal-projects")
 
 def load_yaml(file_path):
     '''
     '''
     yaml_file = yaml.safe_load(open(file_path))
-    return yaml_file
+    return yaml_file['service']
 
 def git_actions(branch_name):
     '''
