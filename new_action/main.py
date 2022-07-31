@@ -11,10 +11,14 @@ def main():
     '''
     '''
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
+
     print(yaml_file)
-    branch_name = f"test_{uuid.uuid4()}"
+
+    branch_name = f"test_{uuid.uuid4().hex[:6]}"
+
     git_actions(branch_name)
-    open_git_pr(branch_name)
+
+    open_git_pr(branch_name, service_name = "test", repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
 def load_yaml(file_path):
     '''
@@ -25,35 +29,33 @@ def load_yaml(file_path):
 def git_actions(branch_name):
     '''
     '''
-
+    commit_msg = "test"
     subprocess.run(f"git checkout -b {branch_name}", shell=True)
     subprocess.run("touch file.txt", shell=True)
     subprocess.run("git add -A", shell=True)
-    subprocess.run("git commit -am test", shell=True)
+    subprocess.run(f"git commit -am {commit_msg}", shell=True)
     subprocess.run(f"git push --set-upstream origin {branch_name}", shell=True)
     # return
 
-def open_git_pr(branch_name):
+def open_git_pr(branch_name, service_name, repo_name):
     '''
     '''
-    service_name = "test"
-    token = {os.getenv('INPUT_ACTIONS_ACCESS_USERNAME') + ":" + os.getenv('INPUT_ACTIONS_ACCESS_KEY')}
     headers = {
         "Accept": "application/vnd.github.v3+json"
         }
     json={
-        'title': 'New Action',
+        'title': f'new changes in services, {service_name}',
         'body': f'New service {service_name}',
         'head': f'{branch_name}',
-        'base': 'master'
+        'base': 'main'
     }
-    res = requests.post('https://api.github.com/repos/saar-win/personal-projects/pulls', json=json, headers=headers, auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY')))
+    res = requests.post('https://api.github.com/repos/{}/pulls'.format(repo_name), json=json, headers=headers, auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY')))
     print(res.text)
 
     if res.ok:
         return res.json()
     else:
-        raise Exception("Error creating PR")
+        raise Exception(f"Error creating PR to {repo_name}")
 
 if __name__ == '__main__':
     main()
