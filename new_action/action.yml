@@ -8,11 +8,11 @@ inputs:
   ACTIONS_ACCESS_USERNAME:
     description: 'User name for the github account'
     required: false
-    default: '{{ secrets.ACTIONS_ACCESS_USERNAME }}'
+    default: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
   ACTIONS_ACCESS_KEY:
     description: 'Password for the GitHub account'
     required: false
-    default: '{{ secrets.ACTIONS_ACCESS_KEY }}'
+    default: ${{ secrets.ACTIONS_ACCESS_KEY }}
 runs:
   using: 'docker'
   image: 'Dockerfile'
