@@ -18,10 +18,10 @@ def main():
     template = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
     # open branch add files
-    git_actions(branch_name)
+    # git_actions(branch_name)
 
     # open PR
-    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
+    # open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
 def load_flag_features(flag_file):
     '''
