@@ -1,0 +1,105 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+name: "{{ service_name }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ service_name }}"
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 50%
+  template:
+    metadata:
+      name: "{{ service_name }}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "5"
+        reloader.stakater.com/auto: "true"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9007'
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      labels:
+        tier: service
+        app: "{{ service_name }}"
+        environment_version: "{{ environment_version }}"
+        aws_environment_account: "{{ environment_account | default('') }}"
+        environment_name: "{{ environment_name }}"
+        build_version: "{{ docker_tag }}"
+        service: "{{ service_name }}"
+        aws_region: "{{ aws_env_region | default('') }}"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-label
+                operator: NotIn
+                values:
+                  - log-collector
+      containers:
+      - name: "{{ service_name }}"
+        image: "{{ docker_image_version }}"
+        env:
+        - name: DEPLOYMENT_STRATEGY
+          value: "{{ deployment_strategy }}"
+        - name: NUMBER_OF_FORKS
+          value: "{{ computepower.services[service].forks.numberOfForks }}"
+        - name: SERVICE_NAME
+          value: "{{ service_name }}"
+        - name: HONEYCOMB_KEY
+          valueFrom:
+            secretKeyRef:
+              name: "{{ service_name }}-secrets"
+              key: honeycomb_key
+        - name: NODE_ENV
+          value: "{{ node_env }}"
+        - name: ENV_NAME
+          value: "{{ environment_name }}"
+        - name: BUILD_VERSION
+          value: "{{ service_git_branch }}"
+        - name: AWS_REGION
+          value: "{{ aws_env_region }}"
+        - name: ENVIRONMENT_ACCOUNT
+          value: "{{ environment_account }}"
+        resources:
+          requests:
+            memory: "{{ computepower.services[service].resources_requests.memory }}"
+            cpu: "{{ computepower.services[service].resources_requests.cpu }}"
+          limits:
+            memory: "{{ computepower.services[service].resources_limits.memory }}"
+            cpu: "{{ computepower.services[service].resources_limits.cpu }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: "{{ service_name }}"
+          containerPort: 8080
+        - name: "prom-metrics"
+          containerPort: 9007
+        startupProbe:
+          httpGet:
+            path: /ping
+            port: "{{ service_name }}"
+          initialDelaySeconds: 30
+          failureThreshold: 6
+          periodSeconds: 20
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: "{{ service_name }}"
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: "{{ service_name }}"
+          initialDelaySeconds: 30
+          failureThreshold: 3
+          periodSeconds: 10
+          timeoutSeconds: 5
+      imagePullSecrets:
+      - name: "{{ github_registry_secret_name | default('nosecretdevenv') }}" # default empty because it's not relevant for dev env

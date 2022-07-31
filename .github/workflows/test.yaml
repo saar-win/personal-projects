@@ -19,3 +19,4 @@ jobs:
           FILE: new_action/test.yml
           ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
+          COMPUTE_POWER_FILE: compute-power-file.yml
