@@ -42,8 +42,8 @@ def create_template(_object, path_compute_power_file, flag_file):
     '''
     feature_flag = load_flag_features(flag_file)
 
-    with open('templates/Deployment.yaml', 'r') as f:
-        template = yaml.safe_load(f)
+    # with open('templates/Deployment.yaml', 'r') as f:
+    #     template = yaml.safe_load(f)
 
     # read the existing compute power files
     compute_power_file = yaml.safe_load(open(path_compute_power_file))
