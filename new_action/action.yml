@@ -20,7 +20,7 @@ inputs:
   FLAGS_FILES:
     description: 'A path to the compute power file'
     required: false
-    default: flag.json
+    default: new_action/flag.json
 runs:
   using: 'docker'
   image: 'Dockerfile'

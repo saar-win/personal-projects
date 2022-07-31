@@ -20,3 +20,4 @@ jobs:
           ACTIONS_ACCESS_USERNAME: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
           ACTIONS_ACCESS_KEY: ${{ secrets.ACTIONS_ACCESS_KEY }}
           COMPUTE_POWER_FILE: compute-power-file.yml
+          FLAG_FILE: new_action/flag.json
