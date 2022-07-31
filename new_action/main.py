@@ -40,7 +40,7 @@ def load_yaml(file_path):
 def create_template(_object, path_compute_power_file, flag_file):
     '''
     '''
-    feature_flag = load_flag_features()
+    feature_flag = load_flag_features(flag_file)
 
     with open('templates/Deployment.yaml', 'r') as f:
         template = yaml.safe_load(f)
