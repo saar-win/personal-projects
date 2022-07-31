@@ -18,6 +18,8 @@ COPY requirements.txt requirements.txt
 # install req
 RUN pip install -r ./requirements.txt
 
-RUN ./app/setup_git.sh
+RUN chmod +x  /app/setup_git.sh
+
+RUN cd /app/ && ./setup_git.sh
 # run the main file
 ENTRYPOINT ["python3", "/app/main.py"]
