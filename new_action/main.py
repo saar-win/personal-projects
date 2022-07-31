@@ -21,7 +21,7 @@ def main():
     git_actions(branch_name)
 
     # open PR
-    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.getenv("GITHUB_REPOSITORY"))
+    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = "saar-win/personal-projects")
 
 def load_yaml(file_path):
     '''
