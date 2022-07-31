@@ -8,7 +8,7 @@ service:
   name: test
   resources:
     requests:
-      cpu: "1Mi"
+      cpu: "2Mi"
       memory: "1Gi"
     limits:
       memory: "128Mi"
