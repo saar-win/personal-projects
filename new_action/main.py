@@ -1,10 +1,10 @@
 import os
 import yaml
+import uuid
+import json
 import requests
 import subprocess
-import uuid
 from requests.auth import HTTPBasicAuth
-import json
 
 def main():
     '''
@@ -15,7 +15,7 @@ def main():
     # create random branch name
     branch_name = f"test_{uuid.uuid4().hex[:6]}"
 
-    template = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"))
+    template = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
     # open branch add files
     git_actions(branch_name)
@@ -23,10 +23,10 @@ def main():
     # open PR
     open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = os.environ.get("GITHUB_REPOSITORY"))
 
-def load_flag_features():
+def load_flag_features(flag_file):
     '''
     '''
-    with open('flag.json', 'r') as f:
+    with open(flag_file, 'r') as f:
         obj = json.load(f)
     return obj
 
@@ -37,7 +37,7 @@ def load_yaml(file_path):
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file['service']
 
-def create_template(_object, path_compute_power_file):
+def create_template(_object, path_compute_power_file, flag_file):
     '''
     '''
     feature_flag = load_flag_features()
