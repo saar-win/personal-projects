@@ -165,7 +165,8 @@ def git_actions(branch_name):
     subprocess.run(f'git config --global user.name "saar-win"', shell=True)
     subprocess.run(f'chown -R runner .', shell=True)
     subprocess.run(f'git checkout -b {branch_name}', shell=True)
-    subprocess.run(f'git commit -am {commit_msg}', shell=True)
+    subprocess.run(f'git add -A', shell=True)
+    subprocess.run(f'git commit -m {commit_msg}', shell=True)
     subprocess.run(f'git push --set-upstream origin {branch_name}', shell=True)
     # return
 
