@@ -164,6 +164,8 @@ def git_actions(branch_name):
     subprocess.run(f'git config --global user.email "saar1122@gmail.com"', shell=True)
     subprocess.run(f'git config --global user.name "saar-win"', shell=True)
     subprocess.run(f'chown -R runner .', shell=True)
+    subprocess.run(f'git clone https://github.com/saar-win/personal-projects.git personal-projects', shell=True)
+    subprocess.run(f'cd personal-projects', shell=True)
     subprocess.run(f'git checkout -b {branch_name}', shell=True)
     subprocess.run(f'git add -A', shell=True)
     subprocess.run(f'git commit -m {commit_msg}', shell=True)
@@ -182,7 +184,7 @@ def open_git_pr(branch_name, service_name, repo_name):
         'head': f'{branch_name}',
         'base': 'main'
     }
-    res = requests.post('https://api.github.com/repos/{}/pulls'.format(repo_name),
+    res = requests.post(f'https://api.github.com/repos/{repo_name}/pulls',
         json = json,
         headers = headers,
         auth = HTTPBasicAuth(os.getenv('INPUT_ACTIONS_ACCESS_USERNAME'), os.getenv('INPUT_ACTIONS_ACCESS_KEY'))
