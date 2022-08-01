@@ -23,7 +23,7 @@ def main():
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
     # initialize git repo
-    git_to_clone = f"https://{os.getenv('INPUT_ACTIONS_ACCESS_KEY')}@github.com/{os.getenv('REPO_NAME')}"
+    git_to_clone = f"https://{os.getenv('INPUT_ACTIONS_ACCESS_KEY')}@github.com/{os.getenv('INPUT_REPO_NAME')}"
     working_branch = "main"
     repo = github("clone", "/tmp" ,git_to_clone, working_branch, "", "")
 
@@ -32,17 +32,17 @@ def main():
 
     # create new branch
     branch_name = f"services/{yaml_file['service']['name']}_{uuid.uuid4().hex[:6]}"
-    new_branch = github("new_branch", "/tmp" ,git_to_clone, branch_name, repo, "")
+    new_branch = github("new_branch", "" ,"", branch_name, repo, "")
 
     # templating the files
     templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
     # add files to branch
     commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
-    changed_files = github("add_files_push", "/tmp" ,git_to_clone, branch_name, repo, commit_msg)
+    changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
 
     # open PR
-    ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
+    ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], "", changed_files)
 
     if ans:
         print("PR created")
