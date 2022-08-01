@@ -26,7 +26,7 @@ def main():
     repo = github("clone", "/tmp" ,git_to_clone, working_branch, "", "")
 
     # set the account
-    github("set_account", "", "", "", "", "")
+    github("set_account", "", "", "", repo, "")
 
     # create new branch
     branch_name = f"services/{yaml_file['service']['name']}_{uuid.uuid4().hex[:6]}"
@@ -59,8 +59,8 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
 
     # git set account
     if action == "set_account":
-        os.system("git config --global user.name \"saar-win\"")
-        os.system("git config --global user.email \"saar1122@gmail.com\"")
+        repo.config_writer().set_value("user", "name", "saar-win").release()
+        repo.config_writer().set_value("user", "email", "saar1122@gmail.com").release()
 
     # create new branch
     if action == "new_branch":
