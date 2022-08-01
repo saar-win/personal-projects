@@ -3,7 +3,7 @@ computepower:
     test:
       requests:
         cpu: 2Mi
-        memory: 3Gi
+        memory: 2Gi
       limits:
         cpu: 90m
         memory: 508Mi
