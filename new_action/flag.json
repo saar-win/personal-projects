@@ -1,0 +1,18 @@
+{
+    "service": true,
+    "deployment": {
+        "resources": {
+            "requests": {
+                "cpu": true,
+                "memory": true
+            },
+            "limits": {
+                "cpu": true,
+                "memory": true
+            }
+        }
+    },
+    "configmap": false,
+    "migration": false,
+    "secrets": false
+}
