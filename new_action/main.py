@@ -5,6 +5,7 @@ import uuid
 import json
 import shutil
 import requests
+import subprocess
 from requests.auth import HTTPBasicAuth
 
 
@@ -16,12 +17,13 @@ def main():
     INPUT_FLAG_FILE: # path to the flag file # '/tmp/changes/new_action/flag.json'
     WORKING_BRANCH # on which branch the changes will be made # main
     INPUT_FILE # for every service # $GITHUB_WORKSPACE/<SERVICE_NAME>.yml
+    REPO_NAME # for every service # saar-win/personal-projects
     '''
     # Load yaml file
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
     # initialize git repo
-    git_to_clone = "https://github.com/saar-win/personal-projects.git"
+    git_to_clone = f"https://{os.getenv('INPUT_ACTIONS_ACCESS_KEY')}@github.com/{os.getenv('REPO_NAME')}"
     working_branch = "main"
     repo = github("clone", "/tmp" ,git_to_clone, working_branch, "", "")
 
@@ -59,7 +61,7 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
 
     # git set account
     if action == "set_account":
-        repo.config_writer().set_value("user", "name", "saar-win").release()
+        repo.config_writer().set_value("user", "name", os.getenv('INPUT_ACTIONS_ACCESS_USERNAME')).release()
         repo.config_writer().set_value("user", "email", "saar1122@gmail.com").release()
 
     # create new branch
@@ -71,6 +73,8 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
         repo.git.add("-A")
         changed_files = [ repo.git.diff(repo.head.commit, name_only=True) ]
         repo.git.commit("-m", commit_msg)
+        os.environ['GIT_USERNAME'] = os.getenv('INPUT_ACTIONS_ACCESS_USERNAME')
+        os.environ['GIT_PASSWORD'] = os.getenv('INPUT_ACTIONS_ACCESS_KEY')
         repo.git.push("origin", branch_name)
         return changed_files
 
@@ -222,7 +226,7 @@ def open_git_pr(branch_name, working_branch, service_name, repo_name_url, change
         'head': branch_name,
         'base': working_branch
     }
-    repo_name = repo_name_url.split("https://github.com/")[1].split(".git")[0]
+    repo_name = repo_name_url.split("@github.com/")[1].split(".git")[0]
     res = requests.post(f'https://api.github.com/repos/{repo_name}/pulls',
         json = json,
         headers = headers,

@@ -20,6 +20,10 @@ inputs:
     description: 'A path to the compute power file'
     required: false
     default: '/tmp/changes/new_action/flag.json'
+  REPO_NAME:
+    description: 'A path to the compute power file'
+    required: false
+    default: 'saar-win/personal-projects.git'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -29,3 +33,4 @@ runs:
     - ${{ inputs.ACTIONS_ACCESS_KEY }}
     - ${{ inputs.COMPUTE_POWER_FILE }}
     - ${{ inputs.FLAG_FILE }}
+    - ${{ inputs.REPO_NAME }}
