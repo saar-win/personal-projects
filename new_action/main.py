@@ -1,57 +1,98 @@
 import os
+import git
 import yaml
 import uuid
 import json
+import shutil
 import requests
-import subprocess
 from requests.auth import HTTPBasicAuth
+
 
 def main():
     '''
+    a list of env var that this script has to get:
+    GIT_TO_CLONE: # https://github.com/saar-win/personal-projects.git
+    INPUT_COMPUTE_POWER_FILE # path to the compute power file # '/tmp/changes/new_action/compute-power-file.yml'
+    INPUT_FLAG_FILE: # path to the flag file # '/tmp/changes/new_action/flag.json'
+    WORKING_BRANCH # on which branch the changes will be made # main
+    INPUT_FILE # for every service # $GITHUB_WORKSPACE/<SERVICE_NAME>.yml
     '''
     # Load yaml file
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
-    # create random branch name
-    branch_name = f"test_{uuid.uuid4().hex[:6]}"
+    # initialize git repo
+    git_to_clone = "https://github.com/saar-win/personal-projects.git"
+    working_branch = "main"
+    repo = github("clone", "/tmp" ,git_to_clone, working_branch, "", "")
 
-    templates = create_template(yaml_file, os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
+    # create new branch
+    branch_name = f"services/{yaml_file['service']['name']}_{uuid.uuid4().hex[:6]}"
+    new_branch = github("new_branch", "/tmp" ,git_to_clone, branch_name, repo, "")
 
-    # open branch add files
-    git_actions(branch_name)
+    # templating the files
+    templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
+
+    # add files to branch
+    commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
+    changed_files = github("add_files_push", "/tmp" ,git_to_clone, branch_name, repo, commit_msg)
 
     # open PR
-    open_git_pr(branch_name, service_name = yaml_file['name'], repo_name = "saar-win/personal-projects")
+    ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
+
+    if ans:
+        print("PR created")
+
+def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
+    '''
+    '''
+    # clone the repository
+    if action == "clone":
+        os.chdir(path_to_clone)
+        if os.path.isdir(path_to_clone + "/changes"):
+            shutil.rmtree(path_to_clone + "/changes")
+        repo = git.Repo.clone_from(git_to_clone, path_to_clone + "/changes")
+        repo.git.checkout(branch_name)
+        return repo
+
+    # create new branch
+    if action == "new_branch":
+        repo = repo.git.checkout("-b", branch_name)
+
+    # add the files and push
+    if action == "add_files_push":
+        repo.git.add("-A")
+        changed_files = [ repo.git.diff('Head', name_only=True) ]
+        repo.git.commit("-m", commit_msg)
+        repo.git.push("origin", branch_name)
+        return changed_files
 
 def load_yaml(file_path):
     '''
     '''
+    # load the yaml file
     yaml_file = yaml.safe_load(open(file_path))
-    return yaml_file['service']
+    return yaml_file
 
-def load_flag_features(flag_file_url):
+def load_flag_features(flag_file_path):
     '''
     '''
-    flag_file = requests.get(flag_file_url).json()
-    return flag_file
+    # load the features flag file
+    flag_file = open(flag_file_path, 'r')
+    return json.loads(flag_file.read())
 
-def create_template(_object, compute_power_file_url, flag_file_url):
+def create_template(_object, compute_power_file_path, flag_file_path):
     '''
     '''
-    feature_flag = load_flag_features(flag_file_url)
-
-    # with open('templates/Deployment.yaml', 'r') as f:
-    #     template = yaml.safe_load(f)
+    # load the features flag file
+    feature_flag = load_flag_features(flag_file_path)
 
     # read the existing compute power files
-    compute_file = requests.get(compute_power_file_url).text
-    compute_power_file = yaml.safe_load(compute_file)
+    compute_power_file = load_yaml(compute_power_file_path)
 
 ##################################################################################################################################
-    if _object['templates']['deployment'] and feature_flag['deployment']:
-
+    if _object['templates']['deployment'] and feature_flag.get('deployment'):
         if feature_flag['deployment']['resources']['requests']['cpu'] and _object['resources']['requests']['cpu']:
-            if compute_power_file['computepower']['services'] == None:
+            if compute_power_file['computepower'].get('services') == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
                 if compute_power_file['computepower']['services'][_object['name']].get('requests') != None:
@@ -64,8 +105,9 @@ def create_template(_object, compute_power_file_url, flag_file_url):
                     'cpu': _object['resources']['requests']['cpu']
                     }
                 })
-        with open('compute-power-file.yml', 'w') as f:
-            f.write(yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False))
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
             f.close()
 ##################################################################################################################################
         if feature_flag['deployment']['resources']['requests']['memory'] and _object['resources']['requests']['memory']:
@@ -82,8 +124,9 @@ def create_template(_object, compute_power_file_url, flag_file_url):
                     'memory': _object['resources']['requests']['memory']
                     }
                 })
-        with open('compute-power-file.yml', 'w') as f:
-            f.write(yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False))
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
             f.close()
 ##################################################################################################################################
         if feature_flag['deployment']['resources']['limits']['cpu'] and _object['resources']['limits']['cpu']:
@@ -101,8 +144,9 @@ def create_template(_object, compute_power_file_url, flag_file_url):
                     'cpu': _object['resources']['limits']['cpu']
                     }
                 })
-        with open('compute-power-file.yml', 'w') as f:
-            f.write(yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False))
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
             f.close()
     ##################################################################################################################################
         if feature_flag['deployment']['resources']['limits']['memory'] and _object['resources']['limits']['memory']:
@@ -120,8 +164,9 @@ def create_template(_object, compute_power_file_url, flag_file_url):
                     'memory': _object['resources']['limits']['memory']
                     }
                 })
-        with open('compute-power-file.yml', 'w') as f:
-            f.write(yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False))
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
             f.close()
 ##################################################################################################################################
 
@@ -156,35 +201,20 @@ def create_template(_object, compute_power_file_url, flag_file_url):
 #     return ""
 
 ########################################################################################
+def open_git_pr(branch_name, working_branch, service_name, repo_name_url, changed_files):
+    '''
+    '''
+    # flat the list
+    changed_files = '\n'.join(changed_files)
 
-def git_actions(branch_name):
-    '''
-    '''
-    commit_msg = "test"
-    subprocess.run(f'git config --global user.email "saar1122@gmail.com"', shell=True)
-    subprocess.run(f'git config --global user.name "saar-win"', shell=True)
-    subprocess.run(f'chown -R runner .', shell=True)
-    subprocess.run(f'cd /tmp', shell=True)
-    subprocess.run(f'git clone https://github.com/saar-win/personal-projects.git personal-projects', shell=True)
-    subprocess.run(f'cd personal-projects', shell=True)
-    subprocess.run(f'git checkout -b {branch_name}', shell=True)
-    subprocess.run(f'git add -A', shell=True)
-    subprocess.run(f'git commit -m {commit_msg}', shell=True)
-    subprocess.run(f'git push --set-upstream origin {branch_name}', shell=True)
-    # return
-
-def open_git_pr(branch_name, service_name, repo_name):
-    '''
-    '''
-    headers = {
-        "Accept": "application/vnd.github.v3+json"
-        }
+    headers = { "Accept": "application/vnd.github.v3+json" }
     json={
         'title': f'new changes in services, {service_name}',
-        'body': f'New service {service_name}',
-        'head': f'{branch_name}',
-        'base': 'main'
+        'body': f'## New changes in files: \n {changed_files}',
+        'head': branch_name,
+        'base': working_branch
     }
+    repo_name = repo_name_url.split("https://github.com/")[1].split(".git")[0]
     res = requests.post(f'https://api.github.com/repos/{repo_name}/pulls',
         json = json,
         headers = headers,

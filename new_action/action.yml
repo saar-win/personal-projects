@@ -5,22 +5,21 @@ inputs:
   FILE:
     description: 'A path to yaml file that contain the service information'
     required: true
+    default: ${{ github.workspace }}/test.yml
   ACTIONS_ACCESS_USERNAME:
     description: 'User name for the github account'
     required: false
-    # default: ${{ secrets.ACTIONS_ACCESS_USERNAME }}
   ACTIONS_ACCESS_KEY:
     description: 'Password for the GitHub account'
     required: false
-    # default: ${{ secrets.ACTIONS_ACCESS_KEY }}
   COMPUTE_POWER_FILE:
     description: 'A path to the compute power file'
     required: false
-    default: 'https://raw.githubusercontent.com/saar-win/personal-projects/v2/new_action/compute-power-file.yml'
+    default: '/tmp/changes/new_action/compute-power-file.yml'
   FLAG_FILE:
     description: 'A path to the compute power file'
     required: false
-    default: 'https://raw.githubusercontent.com/saar-win/personal-projects/v2/new_action/flag.json'
+    default: '/tmp/changes/new_action/flag.json'
 runs:
   using: 'docker'
   image: 'Dockerfile'
