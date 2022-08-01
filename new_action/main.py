@@ -59,7 +59,7 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
 
     # git set account
     if action == "set_account":
-        os.system("git config --global user.name \"saar win\"")
+        os.system("git config --global user.name \"saar-win\"")
         os.system("git config --global user.email \"saar1122@gmail.com\"")
 
     # create new branch
