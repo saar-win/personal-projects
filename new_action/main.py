@@ -61,7 +61,7 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
     # add the files and push
     if action == "add_files_push":
         repo.git.add("-A")
-        changed_files = [ repo.git.diff('Head', name_only=True) ]
+        changed_files = [ repo.git.diff(repo.head.commit, name_only=True) ]
         repo.git.commit("-m", commit_msg)
         repo.git.push("origin", branch_name)
         return changed_files
