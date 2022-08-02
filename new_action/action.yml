@@ -5,7 +5,6 @@ inputs:
   FILE:
     description: 'A path to yaml file that contain the service information'
     required: true
-    default: ${{ github.workspace }}/test.yml
   ACTIONS_ACCESS_USERNAME:
     description: 'User name for the github account'
     required: false
