@@ -42,10 +42,10 @@ def main():
     changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
 
     # open PR
-    ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
+    # ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
 
-    if ans:
-        print("PR created")
+    # if ans:
+    #     print("PR created")
 
 def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
     '''
