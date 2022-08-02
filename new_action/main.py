@@ -28,15 +28,18 @@ def main():
     # Load yaml file
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
-    # set the account
+        # set the account
     github("set_account", "", "", "", repo, "")
+
+    # load the features flag file
+    feature_flag = load_flag_features(os.getenv('INPUT_FLAG_VERSION'), git_to_clone)
 
     # create new branch
     branch_name = f"services/{yaml_file['service']['name']}_{uuid.uuid4().hex[:6]}"
     new_branch = github("new_branch", "" ,"", branch_name, repo, "")
 
     # templating the files
-    templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), git_to_clone)
+    templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), feature_flag)
 
     # add files to branch
     commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
@@ -94,13 +97,9 @@ def load_yaml(file_path):
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file
 
-def create_template(_object, compute_power_file_path, git_to_clone):
+def create_template(_object, compute_power_file_path, feature_flag):
     '''
     '''
-    # load the features flag file
-    feature_flag = load_flag_features(os.getenv('INPUT_FLAG_VERSION'), git_to_clone)
-
-
     # read the existing compute power files
     compute_power_file = load_yaml(compute_power_file_path)
 
