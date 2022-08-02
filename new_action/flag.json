@@ -12,6 +12,7 @@
             }
         }
     },
+    "hpa": true,
     "configmap": false,
     "migration": false,
     "secrets": false
