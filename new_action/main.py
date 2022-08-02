@@ -241,7 +241,7 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             f.write(file)
             f.close()
 ##################################################################################################################################
-        if feature_flag['hpa']['averageCPU'] and _object['hpa']['averageCPU']:
+        if feature_flag['hpa']['averageCPU'] and _object.get('hpa').get('averageCPU'):
             if compute_power_file['computepower']['services'] == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
@@ -261,25 +261,25 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             f.write(file)
             f.close()
 ##################################################################################################################################
-        # if feature_flag['pdb']['minAvailable'] and _object['pdb']['minAvailable']:
-        #     if compute_power_file['computepower']['services'] == None:
-        #         compute_power_file['computepower']['services'] = {}
-        #     if compute_power_file['computepower']['services'].get(_object['name']) != None:
-        #         if compute_power_file['computepower']['services'][_object['name']].get('pdb') != None:
-        #             compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
-        #         if compute_power_file['computepower']['services'][_object['name']].get('pdb') == None:
-        #             compute_power_file['computepower']['services'][_object['name']]['pdb'] = {}
-        #             compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
-        #     elif compute_power_file['computepower']['services'].get(_object['name']) == None:
-        #         to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-        #         to_append.update({ "pdb": {
-        #             'minAvailable': _object['pdb']['minAvailable']
-        #             }
-        #         })
-        # with open(compute_power_file_path, 'w') as f:
-        #     file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
-        #     f.write(file)
-        #     f.close()
+        if feature_flag['pdb']['minAvailable'] and _object.get('pdb').get('minAvailable'):
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('pdb') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
+                if compute_power_file['computepower']['services'][_object['name']].get('pdb') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['pdb'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "pdb": {
+                    'minAvailable': _object['pdb']['minAvailable']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
 ##################################################################################################################################
         # if feature_flag['forks']['numberOfForks'] and _object['forks']['numberOfForks']:
         #     if compute_power_file['computepower']['services'] == None:
