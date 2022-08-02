@@ -26,6 +26,7 @@ def main():
     repo = github("clone", "/tmp/changes" ,git_to_clone, working_branch, "", "")
 
     # Load yaml file
+    subprocess.run("ls -l", shell=True)
     yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
         # set the account
