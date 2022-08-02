@@ -37,15 +37,15 @@ def main():
     # templating the files
     templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
-    # add files to branch
-    commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
-    changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
+    # # add files to branch
+    # commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
+    # changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
 
-    # open PR
-    ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
+    # # open PR
+    # ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
 
-    if ans:
-        print("PR created")
+    # if ans:
+    #     print("PR created")
 
 def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
     '''
@@ -107,13 +107,13 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             if compute_power_file['computepower'].get('services') == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
-                if compute_power_file['computepower']['services'][_object['name']].get('requests') != None:
-                    compute_power_file['computepower']['services'][_object['name']]['requests']['cpu'] = _object['resources']['requests']['cpu']
-                elif compute_power_file['computepower']['services'][_object['name']].get('requests') == None:
-                    compute_power_file['computepower']['services'][_object['name']]['requests'] = {}
+                if compute_power_file['computepower']['services'][_object['name']].get('resources_requests') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_requests']['cpu'] = _object['resources']['requests']['cpu']
+                elif compute_power_file['computepower']['services'][_object['name']].get('resources_requests') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_requests'] = {}
             elif compute_power_file['computepower']['services'].get(_object['name']) == None:
                 to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-                to_append.update({ "requests": {
+                to_append.update({ "resources_requests": {
                     'cpu': _object['resources']['requests']['cpu']
                     }
                 })
@@ -126,13 +126,13 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             if compute_power_file['computepower']['services'] == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
-                if compute_power_file['computepower']['services'][_object['name']].get('requests') != None:
-                    compute_power_file['computepower']['services'][_object['name']]['requests']['memory'] = _object['resources']['requests']['memory']
-                elif compute_power_file['computepower']['services'][_object['name']].get('requests') == None:
-                    compute_power_file['computepower']['services'][_object['name']]['requests'] = {}
+                if compute_power_file['computepower']['services'][_object['name']].get('resources_requests') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_requests']['memory'] = _object['resources']['requests']['memory']
+                elif compute_power_file['computepower']['services'][_object['name']].get('resources_requests') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_requests'] = {}
             elif compute_power_file['computepower']['services'].get(_object['name']) == None:
                 to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-                to_append.update({ "requests": {
+                to_append.update({ "resources_requests": {
                     'memory': _object['resources']['requests']['memory']
                     }
                 })
@@ -145,14 +145,14 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             if compute_power_file['computepower']['services'] == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
-                if compute_power_file['computepower']['services'][_object['name']].get('limits') != None:
-                    compute_power_file['computepower']['services'][_object['name']]['limits']['cpu'] = _object['resources']['limits']['cpu']
-                elif compute_power_file['computepower']['services'][_object['name']].get('limits') == None:
-                    compute_power_file['computepower']['services'][_object['name']]['limits'] = {}
-                    compute_power_file['computepower']['services'][_object['name']]['limits']['cpu'] = _object['resources']['limits']['cpu']
+                if compute_power_file['computepower']['services'][_object['name']].get('resources_limits') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits']['cpu'] = _object['resources']['limits']['cpu']
+                elif compute_power_file['computepower']['services'][_object['name']].get('resources_limits') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits']['cpu'] = _object['resources']['limits']['cpu']
             elif compute_power_file['computepower']['services'].get(_object['name']) == None:
                 to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-                to_append.update({ "limits": {
+                to_append.update({ "resources_limits": {
                     'cpu': _object['resources']['limits']['cpu']
                     }
                 })
@@ -165,15 +165,135 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             if compute_power_file['computepower']['services'] == None:
                 compute_power_file['computepower']['services'] = {}
             if compute_power_file['computepower']['services'].get(_object['name']) != None:
-                if compute_power_file['computepower']['services'][_object['name']].get('limits') != None:
-                    compute_power_file['computepower']['services'][_object['name']]['limits']['memory'] = _object['resources']['limits']['memory']
-                if compute_power_file['computepower']['services'][_object['name']].get('limits') == None:
-                    compute_power_file['computepower']['services'][_object['name']]['limits'] = {}
-                    compute_power_file['computepower']['services'][_object['name']]['limits']['memory'] = _object['resources']['limits']['memory']
+                if compute_power_file['computepower']['services'][_object['name']].get('resources_limits') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits']['memory'] = _object['resources']['limits']['memory']
+                if compute_power_file['computepower']['services'][_object['name']].get('resources_limits') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['resources_limits']['memory'] = _object['resources']['limits']['memory']
             elif compute_power_file['computepower']['services'].get(_object['name']) == None:
                 to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-                to_append.update({ "limits": {
+                to_append.update({ "resources_limits": {
                     'memory': _object['resources']['limits']['memory']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+    ##################################################################################################################################
+        if feature_flag['hpa']['minReplicas'] and _object['hpa']['minReplicas']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['minReplicas'] = _object['hpa']['minReplicas']
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['minReplicas'] = _object['hpa']['minReplicas']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "hpa": {
+                    'minReplicas': _object['hpa']['minReplicas']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+##################################################################################################################################
+        if feature_flag['hpa']['maxReplicas'] and _object['hpa']['maxReplicas']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['maxReplicas'] = _object['hpa']['maxReplicas']
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['maxReplicas'] = _object['hpa']['maxReplicas']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "hpa": {
+                    'maxReplicas': _object['hpa']['maxReplicas']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+##################################################################################################################################
+        if feature_flag['hpa']['averageMEMORY'] and _object['hpa']['averageMEMORY']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['averageMEMORY'] = _object['hpa']['averageMEMORY']
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['averageMEMORY'] = _object['hpa']['averageMEMORY']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "hpa": {
+                    'averageMEMORY': _object['hpa']['averageMEMORY']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+##################################################################################################################################
+        if feature_flag['hpa']['averageCPU'] and _object['hpa']['averageCPU']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['averageCPU'] = _object['hpa']['averageCPU']
+                if compute_power_file['computepower']['services'][_object['name']].get('hpa') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['hpa'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['hpa']['averageCPU'] = _object['hpa']['averageCPU']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "hpa": {
+                    'averageCPU': _object['hpa']['averageCPU']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+##################################################################################################################################
+        if feature_flag['pdb']['minAvailable'] and _object['pdb']['minAvailable']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('pdb') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
+                if compute_power_file['computepower']['services'][_object['name']].get('pdb') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['pdb'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['pdb']['minAvailable'] = _object['pdb']['minAvailable']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "pdb": {
+                    'minAvailable': _object['pdb']['minAvailable']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
+##################################################################################################################################
+        if feature_flag['forks']['numberOfForks'] and _object['forks']['numberOfForks']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('forks') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
+                if compute_power_file['computepower']['services'][_object['name']].get('forks') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['forks'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "forks": {
+                    'numberOfForks': _object['forks']['numberOfForks']
                     }
                 })
         with open(compute_power_file_path, 'w') as f:

@@ -12,6 +12,18 @@
             }
         }
     },
+    "hpa": {
+        "minReplicas": true,
+        "maxReplicas": true,
+        "averageMEMORY": true,
+        "averageCPU": true
+    },
+    "pdb": {
+        "minAvailable": true
+    },
+    "forks":{
+        "numberOfForks": true
+    },
     "configmap": false,
     "migration": false,
     "secrets": false

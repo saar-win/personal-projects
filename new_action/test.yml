@@ -13,6 +13,15 @@ service:
     limits:
       memory: "508Mi"
       cpu: "90m"
+  hpa:
+    minReplicas: 2
+    maxReplicas: 10
+    averageMEMORY: 35
+    averageCPU: 35
+  pdb:
+    minAvailable: "50%"
+  forks:
+    numberOfForks: 2
   volume:
     name: test-volume
     emptyDir: {}
