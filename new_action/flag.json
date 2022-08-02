@@ -18,7 +18,12 @@
         "averageMEMORY": true,
         "averageCPU": true
     },
-    "pdb": true,
+    "pdb": {
+        "minAvailable": true
+    },
+    "forks":{
+        "numberOfForks": true
+    },
     "configmap": false,
     "migration": false,
     "secrets": false
