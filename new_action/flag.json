@@ -12,7 +12,13 @@
             }
         }
     },
-    "hpa": true,
+    "hpa": {
+        "minReplicas": true,
+        "maxReplicas": true,
+        "averageMEMORY": true,
+        "averageCPU": true
+    },
+    "pdb": true
     "configmap": false,
     "migration": false,
     "secrets": false
