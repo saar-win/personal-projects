@@ -283,25 +283,25 @@ def create_template(_object, compute_power_file_path, feature_flag):
             f.write(file)
             f.close()
 ##################################################################################################################################
-        # if feature_flag['forks']['numberOfForks'] and _object['forks']['numberOfForks']:
-        #     if compute_power_file['computepower']['services'] == None:
-        #         compute_power_file['computepower']['services'] = {}
-        #     if compute_power_file['computepower']['services'].get(_object['name']) != None:
-        #         if compute_power_file['computepower']['services'][_object['name']].get('forks') != None:
-        #             compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
-        #         if compute_power_file['computepower']['services'][_object['name']].get('forks') == None:
-        #             compute_power_file['computepower']['services'][_object['name']]['forks'] = {}
-        #             compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
-        #     elif compute_power_file['computepower']['services'].get(_object['name']) == None:
-        #         to_append = compute_power_file['computepower']['services'][_object['name']] = {}
-        #         to_append.update({ "forks": {
-        #             'numberOfForks': _object['forks']['numberOfForks']
-        #             }
-        #         })
-        # with open(compute_power_file_path, 'w') as f:
-        #     file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
-        #     f.write(file)
-        #     f.close()
+        if feature_flag['forks']['numberOfForks'] and _object['forks']['numberOfForks']:
+            if compute_power_file['computepower']['services'] == None:
+                compute_power_file['computepower']['services'] = {}
+            if compute_power_file['computepower']['services'].get(_object['name']) != None:
+                if compute_power_file['computepower']['services'][_object['name']].get('forks') != None:
+                    compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
+                if compute_power_file['computepower']['services'][_object['name']].get('forks') == None:
+                    compute_power_file['computepower']['services'][_object['name']]['forks'] = {}
+                    compute_power_file['computepower']['services'][_object['name']]['forks']['numberOfForks'] = _object['forks']['numberOfForks']
+            elif compute_power_file['computepower']['services'].get(_object['name']) == None:
+                to_append = compute_power_file['computepower']['services'][_object['name']] = {}
+                to_append.update({ "forks": {
+                    'numberOfForks': _object['forks']['numberOfForks']
+                    }
+                })
+        with open(compute_power_file_path, 'w') as f:
+            file = yaml.dump(compute_power_file, default_flow_style=False, sort_keys=False)
+            f.write(file)
+            f.close()
 ##################################################################################################################################
 
 #     if _object['templates']['deployment'] and feature_flag['deployment']:
