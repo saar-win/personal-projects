@@ -2,8 +2,8 @@ computepower:
   services:
     test:
       requests:
-        cpu: 2Mi
+        cpu: 1m
         memory: 3Gi
       limits:
-        cpu: 90m
-        memory: 508Mi
+        cpu: 2m
+        memory: 500Mi
