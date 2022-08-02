@@ -1,9 +1,9 @@
 computepower:
   services:
     test:
-      requests:
+      resources_requests:
         cpu: 2Mi
         memory: 3Gi
-      limits:
+      resources_limits:
         cpu: 90m
         memory: 508Mi
