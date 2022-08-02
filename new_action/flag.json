@@ -18,7 +18,7 @@
         "averageMEMORY": true,
         "averageCPU": true
     },
-    "pdb": true
+    "pdb": true,
     "configmap": false,
     "migration": false,
     "secrets": false
