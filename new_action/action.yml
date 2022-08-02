@@ -20,6 +20,10 @@ inputs:
     description: 'A path to the compute power file'
     required: false
     default: '/tmp/changes/new_action/flag.json'
+  FLAG_VERSION:
+    description: 'The version of the action'
+    required: false
+    default: 'v2'
   REPO_NAME:
     description: 'A path to the compute power file'
     required: false
@@ -34,3 +38,4 @@ runs:
     - ${{ inputs.COMPUTE_POWER_FILE }}
     - ${{ inputs.FLAG_FILE }}
     - ${{ inputs.REPO_NAME }}
+    - ${{ inputs.FLAG_VERSION }}

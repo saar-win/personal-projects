@@ -19,13 +19,14 @@ def main():
     INPUT_FILE # for every service # $GITHUB_WORKSPACE/<SERVICE_NAME>.yml
     REPO_NAME # for every service # saar-win/personal-projects
     '''
-    # Load yaml file
-    yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
     # initialize git repo
     git_to_clone = f"https://{os.getenv('INPUT_ACTIONS_ACCESS_KEY')}@github.com/{os.getenv('INPUT_REPO_NAME')}"
     working_branch = "main"
-    repo = github("clone", "/tmp" ,git_to_clone, working_branch, "", "")
+    repo = github("clone", "/tmp/changes" ,git_to_clone, working_branch, "", "")
+
+    # Load yaml file
+    yaml_file = load_yaml(os.getenv('INPUT_FILE'))
 
     # set the account
     github("set_account", "", "", "", repo, "")
@@ -35,7 +36,7 @@ def main():
     new_branch = github("new_branch", "" ,"", branch_name, repo, "")
 
     # templating the files
-    templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
+    templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), git_to_clone)
 
     # add files to branch
     commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
@@ -52,10 +53,10 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
     '''
     # clone the repository
     if action == "clone":
-        os.chdir(path_to_clone)
-        if os.path.isdir(path_to_clone + "/changes"):
-            shutil.rmtree(path_to_clone + "/changes")
-        repo = git.Repo.clone_from(git_to_clone, path_to_clone + "/changes")
+        os.chdir('/tmp')
+        if os.path.isdir(path_to_clone):
+            shutil.rmtree(path_to_clone)
+        repo = git.Repo.clone_from(git_to_clone, path_to_clone)
         repo.git.checkout(branch_name)
         return repo
 
@@ -78,6 +79,14 @@ def github(action, path_to_clone ,git_to_clone, branch_name, repo, commit_msg):
         repo.git.push("origin", branch_name)
         return changed_files
 
+def load_flag_features(flag_file_version, git_to_clone):
+    '''
+    '''
+    # load the features flag file
+    repo = github("clone", "/tmp/flag" ,git_to_clone, flag_file_version, "", "")
+    flag_file = open("/tmp/flag/new_action/flag.json", 'r')
+    return json.loads(flag_file.read())
+
 def load_yaml(file_path):
     '''
     '''
@@ -85,18 +94,12 @@ def load_yaml(file_path):
     yaml_file = yaml.safe_load(open(file_path))
     return yaml_file
 
-def load_flag_features(flag_file_path):
+def create_template(_object, compute_power_file_path, git_to_clone):
     '''
     '''
     # load the features flag file
-    flag_file = open(flag_file_path, 'r')
-    return json.loads(flag_file.read())
+    feature_flag = load_flag_features(os.getenv('INPUT_FLAG_VERSION'), git_to_clone)
 
-def create_template(_object, compute_power_file_path, flag_file_path):
-    '''
-    '''
-    # load the features flag file
-    feature_flag = load_flag_features(flag_file_path)
 
     # read the existing compute power files
     compute_power_file = load_yaml(compute_power_file_path)
