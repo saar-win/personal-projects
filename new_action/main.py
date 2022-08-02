@@ -38,8 +38,8 @@ def main():
     templates = create_template(yaml_file['service'], os.getenv("INPUT_COMPUTE_POWER_FILE"), os.getenv("INPUT_FLAG_FILE"))
 
     # add files to branch
-    commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
-    changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
+    # commit_msg = f"This is a changes for the service {yaml_file['service']['name']}"
+    # changed_files = github("add_files_push", "/tmp" , "", branch_name, repo, commit_msg)
 
     # open PR
     # ans = open_git_pr(branch_name, working_branch, yaml_file['service']['name'], git_to_clone, changed_files)
@@ -97,7 +97,7 @@ def create_template(_object, compute_power_file_path, flag_file_path):
     '''
     # load the features flag file
     feature_flag = load_flag_features(flag_file_path)
-
+    print(feature_flag)
     # read the existing compute power files
     compute_power_file = load_yaml(compute_power_file_path)
 
@@ -261,6 +261,7 @@ def create_template(_object, compute_power_file_path, flag_file_path):
             f.write(file)
             f.close()
 ##################################################################################################################################
+        print( feature_flag['pdb']['minAvailable'])
         if feature_flag['pdb']['minAvailable'] and _object.get('pdb').get('minAvailable'):
             if compute_power_file['computepower']['services'] == None:
                 compute_power_file['computepower']['services'] = {}
