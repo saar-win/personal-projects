@@ -18,7 +18,7 @@ inputs:
   FLAG_FILE:
     description: 'A path to the compute power file'
     required: false
-    default: '/tmp/changes/new_action/flag.json'
+    default: '/tmp/flag/new_action/flag.json'
   FLAG_VERSION:
     description: 'The version of the action'
     required: false
