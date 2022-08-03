@@ -2,8 +2,17 @@ computepower:
   services:
     test:
       resources_requests:
-        cpu: 2Mi
+        cpu: 10Mi
         memory: 3Gi
       resources_limits:
-        cpu: 90m
-        memory: 508Mi
+        cpu: 10m
+        memory: 500Mi
+      hpa:
+        minReplicas: 2
+        maxReplicas: 10
+        averageMEMORY: 35
+        averageCPU: 35
+      pdb:
+        minAvailable: 50%
+      forks:
+        numberOfForks: 2
